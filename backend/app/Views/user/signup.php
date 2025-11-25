@@ -1,4 +1,3 @@
-signup.php.txt
 <?php
 
 /**
