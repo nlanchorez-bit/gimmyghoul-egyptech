@@ -46,9 +46,10 @@
 
         <!-- Roadmap List -->
         <section id="roadmapList" class="rm-grid">
+            <!-- Switched to $this->include() for reliable data passing in view fragments -->
             <?= $this->include('components/cards/roadmap_card', [
                 'title' => 'User Management (CRUD)',
-                'excerpt' => 'Complete authentication system with signup, login, profile management, and user roles. Includes secure password handling, session management, profile updates, and role-based access control.',
+                'excerpt' => 'Complete authentication system with signup, login, profile management, and user roles.',
                 'status' => 'In Progress',
                 'priority' => 'High',
                 'timeline' => 'Phase 1 - Q1 2024'
@@ -56,7 +57,7 @@
 
             <?= $this->include('components/cards/roadmap_card', [
                 'title' => 'Products Management',
-                'excerpt' => 'Full product catalog system allowing admins to create, read, update, and delete products. Includes image uploads, category management, detailed product information, and inventory tracking.',
+                'excerpt' => 'Full product catalog system allowing admins to create, read, update, and delete products.',
                 'status' => 'Planned',
                 'priority' => 'High',
                 'timeline' => 'Phase 2 - Q2 2024'
@@ -64,15 +65,15 @@
 
             <?= $this->include('components/cards/roadmap_card', [
                 'title' => 'Inventory Management System',
-                'excerpt' => 'Track product stock levels, manage inventory updates, and receive low-stock alerts. Real-time stock monitoring, supplier management, and automated reordering system for efficient business operations.',
+                'excerpt' => 'Track product stock levels, manage inventory updates, and receive low-stock alerts.',
                 'status' => 'Planned',
                 'priority' => 'Medium',
                 'timeline' => 'Phase 3 - Q3 2024'
             ]) ?>
 
             <?= $this->include('components/cards/roadmap_card', [
-                'title' => 'Product Review & Comments System',
-                'excerpt' => 'Allow customers to leave reviews and ratings for products. Includes star rating system, review moderation tools, helpful votes, edit and delete capabilities, and comprehensive review analytics.',
+                'title' => 'Product Review System',
+                'excerpt' => 'Allow customers to leave reviews and ratings for products.',
                 'status' => 'Backlog',
                 'priority' => 'Medium',
                 'timeline' => 'Phase 3 - Q3 2024'
@@ -82,7 +83,6 @@
 
 </main>
 
-<!-- JS for Filtering -->
 <script>
     (function() {
         const select = document.getElementById('statusFilter');

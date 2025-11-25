@@ -1,58 +1,54 @@
 <?php
 // Component: cards/roadmap_card.php
-// Data contract: $title, $excerpt, $status, $priority, $timeline
 
-// 1. Explicitly initialize variables with defaults to handle undefined/null cases
-$title    = $title    ?? 'Untitled Item';
-$excerpt  = $excerpt  ?? 'No description provided.';
+// 1. Data Defaults (Using Null Coalescing for safety)
+// This ensures that if the variable is not passed, it falls back to the default string.
+$title    = $title    ?? 'Untitled Task';
+$excerpt  = $excerpt  ?? 'No details provided.';
 $status   = $status   ?? 'Planned';
 $priority = $priority ?? 'Medium';
 $timeline = $timeline ?? 'TBD';
 
-// 2. Status colors configuration
+// 2. Status Configuration
 $statusColors = [
-    'In Progress' => ['bg' => '#16a34a', 'text' => '#fff'],
-    'Planned'     => ['bg' => '#3b82f6', 'text' => '#fff'],
-    'Backlog'     => ['bg' => '#6b7280', 'text' => '#fff'],
-    'Done'        => ['bg' => '#15803d', 'text' => '#fff']
+    'In Progress' => ['bg' => '#16a34a', 'text' => '#fff'], // Green
+    'Planned'     => ['bg' => '#3b82f6', 'text' => '#fff'], // Blue
+    'Backlog'     => ['bg' => '#6b7280', 'text' => '#fff'], // Gray
+    'Done'        => ['bg' => '#15803d', 'text' => '#fff']  // Dark Green
 ];
 
-// 3. Priority colors configuration
+// 3. Priority Configuration
 $priorityColors = [
-    'High'   => ['bg' => '#c6242c', 'text' => '#fff'],
-    'Medium' => ['bg' => '#c9a669', 'text' => '#161616'],
-    'Low'    => ['bg' => '#c9c9c9', 'text' => '#161616']
+    'High'   => ['bg' => '#c6242c', 'text' => '#fff'],     // Red
+    'Medium' => ['bg' => '#c9a669', 'text' => '#161616'], // Gold
+    'Low'    => ['bg' => '#c9c9c9', 'text' => '#161616']  // Silver
 ];
 
-// 4. Resolve active colors
-$statusColor   = $statusColors[$status]   ?? ['bg' => '#702524', 'text' => '#f3daac'];
-$priorityColor = $priorityColors[$priority] ?? ['bg' => '#702524', 'text' => '#f3daac'];
+// 4. Color Resolution
+$sColor = $statusColors[$status]   ?? ['bg' => '#702524', 'text' => '#f3daac'];
+$pColor = $priorityColors[$priority] ?? ['bg' => '#702524', 'text' => '#f3daac'];
 ?>
 
 <article class="rm-card" data-status="<?= strtolower(esc($status)) ?>">
 
     <div class="rm-card-header">
-        <!-- Decorative pattern overlay -->
         <div class="rm-card-pattern"></div>
 
-        <!-- Status and Priority Badges -->
         <div class="rm-badges">
-            <span class="rm-badge" style="background: <?= $statusColor['bg'] ?>; color: <?= $statusColor['text'] ?>;">
+            <span class="rm-badge" style="background: <?= $sColor['bg'] ?>; color: <?= $sColor['text'] ?>;">
                 <?= esc($status) ?>
             </span>
-            <span class="rm-badge" style="background: <?= $priorityColor['bg'] ?>; color: <?= $priorityColor['text'] ?>;">
+            <span class="rm-badge" style="background: <?= $pColor['bg'] ?>; color: <?= $pColor['text'] ?>;">
                 <?= esc($priority) ?> Priority
             </span>
         </div>
 
-        <!-- Timeline Badge -->
         <div class="rm-badge-timeline">
             📅 <?= esc($timeline) ?>
         </div>
     </div>
 
     <div class="rm-card-body">
-        <!-- Removed !empty check to ensure title always renders if variable exists -->
         <h3 class="rm-card-title">
             <?= esc($title) ?>
         </h3>
@@ -62,7 +58,6 @@ $priorityColor = $priorityColors[$priority] ?? ['bg' => '#702524', 'text' => '#f
         </p>
     </div>
 
-    <!-- Decorative bottom border -->
     <div class="rm-card-footer-line"></div>
 
 </article>
