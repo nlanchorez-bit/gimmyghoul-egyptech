@@ -16,23 +16,30 @@ class Admin extends BaseController
     public function showDashboardPage()
     {
         try {
-            // COMMENTED FOR NOW, FIX LATER
-            // $requestModel = new RequestsModel();
-            // $productModel = new ProductModel();
+            // Uncommented and initialized models to prevent errors
+            $requestModel = new RequestsModel();
+            $productModel = new ProductModel();
+            $userModel    = new UsersModel(); // Added for dashboard stats
 
             // Count active requests and products
             $requestsCount = $requestModel->where('is_active', 1)->countAllResults();
             $productsCount = $productModel->where('is_active', 1)->countAllResults();
+
+            // Added Users count for the dashboard UI
+            $usersCount    = $userModel->where('account_status', 1)->countAllResults();
         } catch (\Exception $e) {
             // Fallback in case of errors
             $requestsCount = "Server Issue: " . $e->getMessage();
             $productsCount = "Server Issue: " . $e->getMessage();
+            $usersCount    = 0;
         }
 
-        // Load the dashboard view with data
+        // Load the dashboard view with data (Passed as individual variables per your structure)
         return view('/admin/dashboard', [
             'requestsCount' => $requestsCount,
             'productsCount' => $productsCount,
+            'usersCount'    => $usersCount,
+            'page_title'    => 'Gimmighoul | Admin Dashboard'
         ]);
     }
 
@@ -188,5 +195,19 @@ class Admin extends BaseController
             'pendingRequestsCount'    => $pendingRequestsCount,
             'accountList'             => $accountList
         ]);
+    }
+
+    /**
+     * Delete a User Account (NEW METHOD)
+     */
+    public function deleteAccount($id)
+    {
+        $userModel = new UsersModel();
+
+        if ($userModel->delete($id)) {
+            return redirect()->to('/admin/accounts')->with('message', 'User deleted successfully.');
+        } else {
+            return redirect()->to('/admin/accounts')->with('error', 'Failed to delete user.');
+        }
     }
 }
