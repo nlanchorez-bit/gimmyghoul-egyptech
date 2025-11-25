@@ -9,6 +9,7 @@
         --accent: #f3daac;
         --bg-page: #f8f9fa;
         --text-main: #161616;
+        --text-muted: #666;
     }
 
     .admin-wrapper {
@@ -226,6 +227,130 @@
         font-weight: bold;
         font-family: 'Tajawal', sans-serif;
     }
+
+    /* --- MODERN MODAL STYLES --- */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(4px);
+        z-index: 1000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .modal-overlay.show {
+        display: flex;
+        opacity: 1;
+    }
+
+    .modal-container {
+        background: white;
+        width: 100%;
+        max-width: 500px;
+        border-radius: 24px;
+        padding: 32px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        position: relative;
+        transform: translateY(20px) scale(0.95);
+        opacity: 0;
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        border-top: 6px solid var(--brand);
+    }
+
+    .modal-overlay.show .modal-container {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+
+    .modal-title {
+        font-family: 'Tajawal', sans-serif;
+        font-weight: 800;
+        font-size: 24px;
+        color: var(--brand);
+        margin-bottom: 24px;
+        border-bottom: 2px solid var(--accent);
+        padding-bottom: 10px;
+    }
+
+    /* Form Styling inside Modal */
+    .form-group {
+        margin-bottom: 16px;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 6px;
+        font-family: 'Tajawal', sans-serif;
+        font-weight: 700;
+        font-size: 14px;
+        color: var(--text-main);
+    }
+
+    .form-input,
+    .form-select {
+        width: 100%;
+        padding: 10px 16px;
+        border-radius: 12px;
+        border: 2px solid #e2e8f0;
+        font-family: 'Scheherazade New', serif;
+        font-size: 16px;
+        color: var(--text-main);
+        transition: border-color 0.2s;
+        outline: none;
+    }
+
+    .form-input:focus,
+    .form-select:focus {
+        border-color: var(--brand);
+    }
+
+    .modal-actions {
+        margin-top: 32px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+    }
+
+    .btn-modal {
+        padding: 10px 24px;
+        border-radius: 50px;
+        font-family: 'Tajawal', sans-serif;
+        font-weight: 700;
+        font-size: 14px;
+        cursor: pointer;
+        border: none;
+        transition: transform 0.1s;
+    }
+
+    .btn-modal:active {
+        transform: scale(0.98);
+    }
+
+    .btn-cancel {
+        background: #f1f5f9;
+        color: #64748b;
+    }
+
+    .btn-cancel:hover {
+        background: #e2e8f0;
+    }
+
+    .btn-save {
+        background: var(--brand);
+        color: white;
+        box-shadow: 0 4px 12px rgba(112, 37, 36, 0.2);
+    }
+
+    .btn-save:hover {
+        background: var(--brand-light);
+    }
 </style>
 
 <main class="admin-wrapper">
@@ -296,8 +421,6 @@
 
         <div class="page-header">
             <h1 class="page-title">Manage User Base</h1>
-            <a href="<?= site_url('users/create') ?>" class="cta-button" style="text-decoration:none; font-size:14px; padding: 10px 24px; border-radius:50px; background: linear-gradient(135deg, #8b2f2e 0%, #702524 100%); color:white; font-weight:700;">
-                + Add New User
             </a>
         </div>
 
@@ -373,7 +496,7 @@
                                         <?= date('M d, Y', strtotime((string)$created)) ?>
                                     </td>
                                     <td style="text-align: right;">
-                                        <a href="<?= site_url('admin/accounts/edit/' . $id) ?>" class="btn-action btn-edit">Edit</a>
+                                        <a href="javascript:void(0);" class="btn-action btn-edit" onclick='openEditModal(<?= json_encode($user) ?>)'>Edit</a>
                                         <a href="<?= site_url('admin/accounts/delete/' . $id) ?>" class="btn-action btn-delete" onclick="return confirm('Delete this user?');">Delete</a>
                                     </td>
                                 </tr>
@@ -390,5 +513,127 @@
 
     </div>
 </main>
+
+<!-- Modern Edit Account Modal -->
+<div id="editAccountModal" class="modal-overlay">
+    <div class="modal-container">
+        <h2 class="modal-title">Edit Account</h2>
+
+        <form id="editAccountForm">
+            <input type="hidden" name="id" id="editAccountId">
+
+            <div class="form-group">
+                <label class="form-label" for="editFirstName">First Name</label>
+                <input type="text" name="first_name" id="editFirstName" class="form-input" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="editLastName">Last Name</label>
+                <input type="text" name="last_name" id="editLastName" class="form-input" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="editEmail">Email Address</label>
+                <input type="email" name="email" id="editEmail" class="form-input" required>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <div class="form-group">
+                    <label class="form-label" for="editType">Role</label>
+                    <select name="type" id="editType" class="form-select">
+                        <option value="admin">Admin</option>
+                        <option value="client">Client</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="editStatus">Status</label>
+                    <select name="account_status" id="editStatus" class="form-select">
+                        <option value="1">Active</option>
+                        <option value="0">Inactive</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="editGender">Gender</label>
+                <select name="gender" id="editGender" class="form-select">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="">Other/Not Set</option>
+                </select>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" onclick="closeEditModal()" class="btn-modal btn-cancel">Cancel</button>
+                <button type="submit" class="btn-modal btn-save">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openEditModal(user) {
+        // Populate form
+        document.getElementById('editAccountId').value = user.id;
+        document.getElementById('editFirstName').value = user.first_name;
+        document.getElementById('editLastName').value = user.last_name;
+        document.getElementById('editEmail').value = user.email;
+        document.getElementById('editType').value = user.type;
+        document.getElementById('editStatus').value = user.account_status;
+        document.getElementById('editGender').value = user.gender;
+
+        // Show Modal with animation class
+        const modal = document.getElementById('editAccountModal');
+        modal.style.display = 'flex';
+        // Small timeout to allow display:flex to apply before adding opacity class
+        setTimeout(() => {
+            modal.classList.add('show');
+        }, 10);
+    }
+
+    function closeEditModal() {
+        const modal = document.getElementById('editAccountModal');
+        modal.classList.remove('show');
+
+        // Wait for transition to finish before hiding
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 300);
+    }
+
+    // Close on backdrop click
+    document.getElementById('editAccountModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeEditModal();
+        }
+    });
+
+    // AJAX form submission
+    document.getElementById('editAccountForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        let formData = new FormData(this);
+        let id = formData.get('id');
+
+        // Assuming route is /admin/accounts/edit/{id}
+        fetch('<?= site_url('admin/accounts/edit/') ?>' + id, {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Error: ' + (data.error || 'Unknown error'));
+                }
+            })
+            .catch(err => alert('Error: ' + err));
+    });
+</script>
 
 <?= $this->include('components/footer') ?>

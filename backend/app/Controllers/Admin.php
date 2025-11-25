@@ -197,4 +197,43 @@ class Admin extends BaseController
             return redirect()->to('/admin/accounts')->with('error', 'Failed to delete user.');
         }
     }
+
+    public function ajaxEditAccount($id = null)
+    {
+        $userModel = new \App\Models\UsersModel();
+
+        if (!$this->request->isAJAX()) {
+            return $this->response->setJSON(['success' => false, 'error' => 'Invalid request']);
+        }
+
+        // Validate input (optional but recommended)
+        $rules = [
+            'first_name' => 'required|min_length[2]',
+            'last_name'  => 'required|min_length[2]',
+            'email'      => 'required|valid_email',
+            'type'       => 'required',
+            'account_status' => 'required|in_list[0,1]',
+            'gender'     => 'permit_empty|in_list[Male,Female,]',
+        ];
+
+        if (!$this->validate($rules)) {
+            return $this->response->setJSON(['success' => false, 'error' => implode(', ', $this->validator->getErrors())]);
+        }
+
+        $data = [
+            'first_name'     => $this->request->getPost('first_name'),
+            'last_name'      => $this->request->getPost('last_name'),
+            'email'          => $this->request->getPost('email'),
+            'type'           => $this->request->getPost('type'),
+            'account_status' => $this->request->getPost('account_status'),
+            'gender'         => $this->request->getPost('gender'),
+        ];
+
+        try {
+            $userModel->update($id, $data);
+            return $this->response->setJSON(['success' => true]);
+        } catch (\Exception $e) {
+            return $this->response->setJSON(['success' => false, 'error' => $e->getMessage()]);
+        }
+    }
 }
