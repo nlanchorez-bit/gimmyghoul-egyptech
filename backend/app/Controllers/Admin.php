@@ -16,10 +16,8 @@ class Admin extends BaseController
     public function showDashboardPage()
     {
         try {
-            // Initialize models
             $requestModel = new RequestsModel();
             $productModel = new ProductModel();
-            $userModel    = new UsersModel();
 
             // Count active requests (is_active = 1 is used in your Requests table)
             $requestsCount = $requestModel->where('is_active', 1)->countAllResults();
