@@ -314,7 +314,7 @@
                         </svg>
                     </div>
                     <div class="stat-details">
-                        <div class="stat-title"><a href="<?= site_url('users') ?>">User Base</a></div>
+                        <div class="stat-title"><a href="<?= site_url('admin/accounts') ?>">User Base</a></div>
                         <div class="stat-subtitle">Account & Roles</div>
                     </div>
                 </div>
@@ -325,8 +325,8 @@
                 </div>
 
                 <div class="stat-actions">
-                    <a href="<?= site_url('users') ?>" class="btn-dash-outline btn-dash">Manage</a>
-                    <a href="<?= site_url('users/create') ?>" class="btn-dash btn-dash-primary">Add User</a>
+                    <a href="<?= site_url('admin/accounts') ?>" class="btn-dash-outline btn-dash">Manage</a>
+                    <a href="<?= site_url('admin/accounts') ?>" class="btn-dash btn-dash-primary">View Users</a>
                 </div>
             </article>
 
