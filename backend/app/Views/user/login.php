@@ -1,16 +1,16 @@
 <?php
 
 /**
- * views/auth/signup.php
+ * views/auth/login.php
  *
  * Data contract (optional):
- * - $action: string - form action URL (default: '/signup')
+ * - $action: string - form action URL (default: '/login')
  * - $method: string - http method (default: 'post')
  * - $errors: array|null - validation errors keyed by field name
  * - $old: array|null - old input values
  */
 
-$action = $action ?? '/signup';
+$action = $action ?? '/login';
 $method = strtoupper($method ?? 'post');
 $errors = $errors ?? [];
 $old = $old ?? [];
@@ -23,7 +23,7 @@ $brandTitle = $brandTitle ?? 'Egypt';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= htmlspecialchars($brandTitle) ?> — Sign Up</title>
+    <title><?= htmlspecialchars($brandTitle) ?> — Login</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -42,7 +42,7 @@ $brandTitle = $brandTitle ?? 'Egypt';
         </div>
     <?php endif; ?>
 
-    <?= $this->include('components/signup_content') ?>
+    <?= view('components/login_component.php') ?>
 
     <script>
         setTimeout(function() {
