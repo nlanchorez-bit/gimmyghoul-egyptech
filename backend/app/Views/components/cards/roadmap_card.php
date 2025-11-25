@@ -1,13 +1,13 @@
 <?php
 // Component: cards/roadmap_card.php
 
-// 1. Data Defaults (Using Null Coalescing for safety)
-// This ensures that if the variable is not passed, it falls back to the default string.
-$title    = $title    ?? 'Untitled Task';
-$excerpt  = $excerpt  ?? 'No details provided.';
-$status   = $status   ?? 'Planned';
-$priority = $priority ?? 'Medium';
-$timeline = $timeline ?? 'TBD';
+// 1. Data Defaults
+// using empty() check to cover both unset variables and empty strings
+$title    = !empty($title)    ? $title    : 'Untitled Task';
+$excerpt  = !empty($excerpt)  ? $excerpt  : 'No details provided.';
+$status   = !empty($status)   ? $status   : 'Planned';
+$priority = !empty($priority) ? $priority : 'Medium';
+$timeline = !empty($timeline) ? $timeline : 'TBD';
 
 // 2. Status Configuration
 $statusColors = [
