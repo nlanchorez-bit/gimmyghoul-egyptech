@@ -16,9 +16,8 @@ class Admin extends BaseController
     public function showDashboardPage()
     {
         try {
-            // COMMENTED FOR NOW, FIX LATER
-            // $requestModel = new RequestsModel();
-            // $productModel = new ProductModel();
+            $requestModel = new RequestsModel();
+            $productModel = new ProductModel();
 
             // Count active requests and products
             $requestsCount = $requestModel->where('is_active', 1)->countAllResults();
