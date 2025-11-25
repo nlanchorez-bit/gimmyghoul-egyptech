@@ -875,6 +875,163 @@
                 text-align: center;
             }
         }
+
+        .shop-hero {
+            position: relative;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%);
+            padding: 80px 20px;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .shop-hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle at 50% 50%, rgba(112, 37, 36, 0.2) 0%, transparent 70%);
+            opacity: 0.6;
+        }
+
+        .shop-hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .shop-title {
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 700;
+            font-size: 48px;
+            color: #f3daac;
+            /* Gold */
+            margin-bottom: 16px;
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .shop-subtitle {
+            font-family: 'Scheherazade New', serif;
+            font-size: 20px;
+            color: #ddd;
+        }
+
+        .shop-hero-border {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: repeating-linear-gradient(90deg, #f3daac 0px, #f3daac 30px, #702524 30px, #702524 60px);
+        }
+
+        /* Layout Styles */
+        .shop-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            gap: 40px;
+        }
+
+        @media (max-width: 900px) {
+            .shop-container {
+                grid-template-columns: 1fr;
+            }
+
+            .shop-sidebar {
+                display: none;
+                /* Hide sidebar on mobile for simplicity */
+            }
+        }
+
+        /* Sidebar Styles */
+        .filter-card {
+            background: white;
+            padding: 24px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        }
+
+        .filter-title {
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 700;
+            font-size: 18px;
+            color: #702524;
+            margin-bottom: 16px;
+            border-bottom: 2px solid #f3daac;
+            padding-bottom: 8px;
+            display: inline-block;
+        }
+
+        .filter-list {
+            list-style: none;
+        }
+
+        .filter-list li {
+            margin-bottom: 10px;
+        }
+
+        .filter-list a {
+            text-decoration: none;
+            color: #555;
+            font-family: 'Scheherazade New', serif;
+            font-size: 16px;
+            transition: color 0.2s;
+            display: block;
+        }
+
+        .filter-list a:hover,
+        .filter-list a.active {
+            color: #702524;
+            font-weight: 700;
+        }
+
+        .price-inputs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .price-input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: 'Scheherazade New', serif;
+        }
+
+        .filter-btn {
+            width: 100%;
+            padding: 10px;
+            background: #702524;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 600;
+        }
+
+        /* Grid Styles */
+        .shop-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .no-products {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px;
+            color: #888;
+            font-family: 'Scheherazade New', serif;
+            font-size: 18px;
+        }
     </style>
 </head>
 
