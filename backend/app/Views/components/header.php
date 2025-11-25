@@ -1,12 +1,15 @@
 <!-- Header -->
 <header class="header">
     <nav class="nav-menu">
-        <!-- Use base_url() for links in CI4 -->
-        <button class="nav-item" onclick="window.location.href='<?= base_url('/') ?>'">Home</button>
-        <button class="nav-item">Consoles</button>
-        <button class="nav-item">Accessories</button>
-        <button class="nav-item">Support</button>
-        <button class="nav-item">About Us</button>
+        <!-- Converted buttons to anchors using site_url() for proper CI4 routing -->
+        <a href="<?= site_url('/') ?>" class="nav-item" style="text-decoration: none;">Home</a>
+        <a href="<?= site_url('games') ?>" class="nav-item" style="text-decoration: none;">Consoles</a>
+        <a href="<?= site_url('accessories') ?>" class="nav-item" style="text-decoration: none;">Accessories</a>
+        <a href="<?= site_url('support') ?>" class="nav-item" style="text-decoration: none;">Support</a>
+        <a href="<?= site_url('about-us') ?>" class="nav-item" style="text-decoration: none;">About Us</a>
     </nav>
-    <button class="signup-btn">Sign Up</button>
+
+
+    <!-- Sign Up Button as a Link -->
+    <a href="<?= site_url('signup') ?>" class="signup-btn" style="text-decoration: none;">Sign Up</a>
 </header>
