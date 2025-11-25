@@ -8,6 +8,7 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/', 'Home::index');
 $routes->get('games', 'Home::games');
 $routes->get('games', 'Shop::index');
+$routes->get('shop', 'Shop::index');
 $routes->get('accessories', 'Home::accessories');
 $routes->get('support', 'Home::support');
 $routes->get('about-us', 'Home::about'); // Links 'about-us' URL to 'about' method
