@@ -1,4 +1,3 @@
-signup_component.php.txt
 <?php
 $action = $action ?? '/signup';
 $method = strtoupper($method ?? 'post');
