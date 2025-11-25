@@ -160,7 +160,7 @@ class Auth extends BaseController
             'password_hash'   => password_hash($request->getPost('password'), PASSWORD_DEFAULT),
             'type'            => 'client',
             'account_status'  => 1,
-            'email_activated' => 0,
+            'email_activated' => 1,
         ];
 
         if (! $userModel->insert($data)) {
