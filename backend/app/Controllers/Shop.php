@@ -13,7 +13,7 @@ class Shop extends BaseController
 
         // Fetch all products where 'available' is true (1)
         // Using findAll() gets all matching records from the database
-        $products = $productModel->where('available', true)->findAll();
+        $products = $productModel->where('is_available', true)->findAll();
 
         $data = [
             'page_title' => 'Gimmighoul | Consoles Catalog',
