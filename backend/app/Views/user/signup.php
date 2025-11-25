@@ -43,7 +43,7 @@ $brandTitle = $brandTitle ?? 'Egypt';
         </div>
     <?php endif; ?>
 
-    <?= $this->include('components/signup_content') ?>
+    <?= $this->include('components/signup_component') ?>
 
     <script>
         setTimeout(function() {
