@@ -22,7 +22,6 @@ class CreateProductsTable extends Migration
             'slug' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 255,
-                'unique'     => true, // Useful for SEO friendly URLs
             ],
             'category' => [
                 'type'       => 'VARCHAR',
