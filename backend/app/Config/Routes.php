@@ -30,6 +30,11 @@ $routes->get('about-us', 'Home::about'); // Links 'about-us' URL to 'about' meth
 $routes->get('moodboard', 'Home::moodboard');
 $routes->get('roadmap', 'Home::roadmap');
 
+// Shop Actions
+$routes->get('shop/upload', 'Shop::create');      // Show upload form
+$routes->post('shop/store', 'Shop::store');       // Process upload
+$routes->get('shop/delete/(:num)', 'Shop::delete/$1'); // Delete item
+
 // Admin (if previously added)
 $routes->get('/admin/dashboard', 'Admin::showDashboardPage');
 
