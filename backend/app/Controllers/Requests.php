@@ -3,161 +3,102 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use App\Models\ProductsModel;
 use App\Models\RequestsModel;
-use CodeIgniter\HTTP\ResponseInterface;
+use App\Models\ProductModel; // FIX: Changed from ProductsModel to ProductModel
 
 class Requests extends BaseController
 {
     /**
-     * Displays the checkout/request form for a specific product.
-     * Equivalent to 'showReservationRequestPage'
+     * 1. Show the Checkout Form (For Buyers)
      */
     public function checkout($productId)
     {
-        $session = session();
-        $productsModel = new ProductsModel();
+        // Require login to buy
+        if (!session()->has('user')) {
+            return redirect()->to('/login')->with('error', 'Please login to place an order.');
+        }
 
-        // 1. Fetch the specific product being bought
-        $product = $productsModel->where('id', $productId)->first();
+        // FIX: Use ProductModel instead of ProductsModel
+        $productsModel = new ProductModel();
+        $product = $productsModel->find($productId);
 
         if (!$product) {
-            return redirect()->to('/products')->with('error', 'Product not found.');
+            return redirect()->to('/shop')->with('error', 'Product not found.');
         }
 
-        // 2. Try to prefill user data from session (if logged in)
-        $firstName = $session->get('user.first_name'); // e.g. from auth middleware
-        $lastName  = $session->get('user.last_name');
-        $email     = $session->get('user.email');
+        // Check stock (Handle object or array return type safely)
+        $stock = is_array($product) ? $product['stock'] : $product->stock;
 
-        // Fallback: If session data is structured differently (like 'name' string)
-        if (empty($firstName) && $session->has('name')) {
-            $parts = explode(' ', $session->get('name'), 2);
-            $firstName = $parts[0] ?? '';
-            $lastName  = $parts[1] ?? '';
-        }
-        if (empty($email) && $session->has('email')) {
-            $email = $session->get('email');
+        if ($stock <= 0) {
+            return redirect()->back()->with('error', 'This item is currently out of stock.');
         }
 
-        return view('requests/checkout', [
-            'product'    => $product,
-            'first_name' => $firstName ?? '',
-            'last_name'  => $lastName ?? '',
-            'email'      => $email ?? '',
-            'productId'  => $productId,
+        $user = session()->get('user');
+
+        return view('user/checkout', [
+            'product' => $product,
+            'user'    => $user
         ]);
     }
 
     /**
-     * Handles the form submission.
-     * Equivalent to 'createRequest'
+     * 2. Process the Order (Create the Request)
      */
     public function placeOrder()
     {
         $request = \Config\Services::request();
         $session = session();
-        $requestModel = new RequestsModel();
 
-        $post = $request->getPost();
-
-        // 1. Validation Rules
-        $validation = \Config\Services::validation();
         $rules = [
-            'product_id' => [
-                'label' => 'Product',
-                'rules' => 'required|is_natural_no_zero',
-            ],
-            'first_name' => [
-                'label' => 'First Name',
-                'rules' => 'required|min_length[2]|max_length[100]',
-            ],
-            'last_name' => [
-                'label' => 'Last Name',
-                'rules' => 'required|min_length[2]|max_length[100]',
-            ],
-            'email' => [
-                'label' => 'Email',
-                'rules' => 'required|valid_email',
-            ],
-            'phone' => [
-                'label' => 'Phone',
-                'rules' => 'permit_empty|min_length[7]|max_length[20]',
-            ],
-            'quantity' => [
-                'label' => 'Quantity',
-                'rules' => 'required|is_natural_no_zero',
-            ],
+            'product_id' => 'required|is_natural_no_zero',
+            'quantity'   => 'required|is_natural_no_zero',
+            'first_name' => 'required',
+            'last_name'  => 'required',
+            'email'      => 'required|valid_email',
+            'phone'      => 'required',
         ];
 
-        // 2. Run Validation
-        if (!$validation->setRules($rules)->run($post)) {
-            $errors = $validation->getErrors();
-
-            // AJAX Response
-            if ($request->isAJAX()) {
-                return $this->response->setJSON([
-                    'ok'     => false,
-                    'errors' => $errors,
-                    'old'    => $post,
-                ])->setStatusCode(422);
-            }
-
-            // Standard Response: Reload view with errors
-            $productsModel = new ProductsModel();
-            $product = $productsModel->find($post['product_id'] ?? null);
-
-            return view('requests/checkout', [
-                'product'     => $product,
-                'first_name'  => $post['first_name'] ?? '',
-                'last_name'   => $post['last_name'] ?? '',
-                'email'       => $post['email'] ?? '',
-                'productId'   => $post['product_id'] ?? null,
-                'errors'      => array_values($errors), // Flatten for simple list
-                'fieldErrors' => $errors,               // Key-value for field highlighting
-                'old'         => $post,
-            ]);
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        // 3. Prepare Data for Insertion
-        $saveData = [
-            'product_id'          => $post['product_id'],
-            'first_name'          => $post['first_name'],
-            'last_name'           => $post['last_name'],
-            'email'               => $post['email'],
-            'phone'               => $post['phone'] ?? null,
-            'quantity'            => $post['quantity'],
-            'additional_requests' => $post['additional_requests'] ?? null,
-            'status'              => 'pending',
-            'is_active'           => 1,
-            'user_id'             => $session->has('id') ? $session->get('id') : null, // Link to logged-in user
+        // FIX: Use ProductModel
+        $productsModel = new ProductModel();
+        $product = $productsModel->find($request->getPost('product_id'));
+
+        // Check stock again on submission
+        $currentStock = is_array($product) ? $product['stock'] : $product->stock;
+
+        if ($request->getPost('quantity') > $currentStock) {
+            return redirect()->back()->withInput()->with('error', 'Not enough stock available.');
+        }
+
+        $requestsModel = new RequestsModel();
+        $data = [
+            'product_id'          => $request->getPost('product_id'),
+            'user_id'             => $session->get('user.id'),
+            'first_name'          => $request->getPost('first_name'),
+            'last_name'           => $request->getPost('last_name'),
+            'email'               => $request->getPost('email'),
+            'phone'               => $request->getPost('phone'),
+            'quantity'            => $request->getPost('quantity'),
+            'additional_requests' => $request->getPost('additional_requests'),
+            'status'              => 'pending', // Default status for Admin review
+            'is_active'           => 1
         ];
 
-        try {
-            // 4. Insert into Database
-            if ($requestModel->insert($saveData)) {
-
-                // Success: AJAX
-                if ($request->isAJAX()) {
-                    return $this->response->setJSON([
-                        'ok' => true,
-                        'message' => 'Order placed successfully!',
-                        'redirect' => base_url('requests/success')
-                    ]);
-                }
-
-                // Success: Standard
-                return view('requests/success', ['order' => $saveData]);
-            } else {
-                throw new \Exception('Database insert failed.');
-            }
-        } catch (\Exception $e) {
-            // Error Handling
-            if ($request->isAJAX()) {
-                return $this->response->setStatusCode(ResponseInterface::HTTP_INTERNAL_SERVER_ERROR)
-                    ->setJSON(['success' => false, 'message' => 'Server error: ' . $e->getMessage()]);
-            }
+        if ($requestsModel->insert($data)) {
+            return redirect()->to('/requests/success');
+        } else {
             return redirect()->back()->withInput()->with('error', 'Failed to place order.');
         }
+    }
+
+    /**
+     * 3. Success Page
+     */
+    public function success()
+    {
+        return view('user/request_success');
     }
 }

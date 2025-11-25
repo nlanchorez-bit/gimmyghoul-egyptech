@@ -266,7 +266,6 @@
                 </div>
 
                 <div class="stat-actions">
-                    <!-- Redundant buttons removed as requested -->
                     <a href="<?= site_url('/') ?>" class="btn-dash btn-dash-primary" target="_blank">
                         View Live Site
                     </a>
@@ -297,7 +296,8 @@
 
                 <div class="stat-actions">
                     <a href="<?= site_url('shop') ?>" class="btn-dash-outline btn-dash">View Catalog</a>
-                    <a href="<?= site_url('shop/create') ?>" class="btn-dash btn-dash-primary">+ Add Product</a>
+                    <!-- Points to Shop controller for uploading -->
+                    <a href="<?= site_url('shop/upload') ?>" class="btn-dash btn-dash-primary">+ Add Product</a>
                 </div>
             </article>
 
@@ -314,6 +314,7 @@
                         </svg>
                     </div>
                     <div class="stat-details">
+                        <!-- FIX: Added 'admin/' prefix -->
                         <div class="stat-title"><a href="<?= site_url('admin/accounts') ?>">User Base</a></div>
                         <div class="stat-subtitle">Account & Roles</div>
                     </div>
@@ -325,6 +326,7 @@
                 </div>
 
                 <div class="stat-actions">
+                    <!-- FIX: Added 'admin/' prefix -->
                     <a href="<?= site_url('admin/accounts') ?>" class="btn-dash-outline btn-dash">Manage</a>
                     <a href="<?= site_url('admin/accounts') ?>" class="btn-dash btn-dash-primary">View Users</a>
                 </div>
@@ -342,7 +344,8 @@
                         </svg>
                     </div>
                     <div class="stat-details">
-                        <div class="stat-title"><a href="<?= site_url('requests') ?>">Requests</a></div>
+                        <!-- FIX: Added 'admin/' prefix -->
+                        <div class="stat-title"><a href="<?= site_url('admin/requests') ?>">Requests</a></div>
                         <div class="stat-subtitle">Commissions & Orders</div>
                     </div>
                 </div>
@@ -353,8 +356,9 @@
                 </div>
 
                 <div class="stat-actions">
-                    <a href="<?= site_url('requests') ?>" class="btn-dash-outline btn-dash">View All</a>
-                    <a href="<?= site_url('requests/create') ?>" class="btn-dash btn-dash-primary">New Request</a>
+                    <!-- FIX: Added 'admin/' prefix -->
+                    <a href="<?= site_url('admin/requests') ?>" class="btn-dash-outline btn-dash">View All</a>
+                    <!-- Removed 'New Request' button since Admins manage requests, buyers create them -->
                 </div>
             </article>
 
