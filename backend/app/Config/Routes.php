@@ -18,7 +18,7 @@ $routes->get('moodboard', 'Home::moodboard');
 $routes->get('roadmap', 'Home::roadmap');
 
 // Admin (if previously added)
-$routes->get('admin', 'Admin::index');
+$routes->get('/admin/dashboard', 'Admin::showDashboardPage');
 
 $routes->get('/login', 'Auth::showLoginPage');
 $routes->post('/login', 'Auth::login');
