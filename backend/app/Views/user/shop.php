@@ -43,11 +43,23 @@
 
             <div class="filter-card">
                 <h3 class="filter-title">Price Range</h3>
-                <div class="price-inputs">
-                    <input type="number" placeholder="Min" class="price-input">
-                    <input type="number" placeholder="Max" class="price-input">
-                </div>
-                <button class="filter-btn">Apply</button>
+                <!-- UPDATED: Form wrapper to make filters functional -->
+                <form action="<?= current_url() ?>" method="get">
+                    <div class="price-inputs">
+                        <input type="number" name="min_price" placeholder="Min" class="price-input"
+                            value="<?= esc($filters['min_price'] ?? '') ?>">
+                        <input type="number" name="max_price" placeholder="Max" class="price-input"
+                            value="<?= esc($filters['max_price'] ?? '') ?>">
+                    </div>
+                    <button type="submit" class="filter-btn">Apply</button>
+
+                    <!-- Optional: Clear filter link -->
+                    <?php if (!empty($filters['min_price']) || !empty($filters['max_price'])): ?>
+                        <div style="margin-top: 10px; text-align: center;">
+                            <a href="<?= base_url('shop') ?>" style="font-size: 12px; color: #999; text-decoration: underline;">Clear Filters</a>
+                        </div>
+                    <?php endif; ?>
+                </form>
             </div>
         </aside>
 

@@ -16,67 +16,69 @@ class Admin extends BaseController
     public function showDashboardPage()
     {
         try {
-            // Uncommented and initialized models to prevent errors
+            // Initialize models
             $requestModel = new RequestsModel();
             $productModel = new ProductModel();
-            $userModel    = new UsersModel(); // Added for dashboard stats
+            $userModel    = new UsersModel();
 
-            // Count active requests and products
+            // Count active requests (is_active = 1 is used in your Requests table)
             $requestsCount = $requestModel->where('is_active', 1)->countAllResults();
-            $productsCount = $productModel->where('is_active', 1)->countAllResults();
 
-            // Added Users count for the dashboard UI
+            // Count products (Using is_available as the 'active' metric for products)
+            $productsCount = $productModel->where('is_available', 1)->countAllResults();
+
+            // Count active Users
             $usersCount    = $userModel->where('account_status', 1)->countAllResults();
         } catch (\Exception $e) {
             // Fallback in case of errors
-            $requestsCount = "Server Issue: " . $e->getMessage();
-            $productsCount = "Server Issue: " . $e->getMessage();
+            $requestsCount = "Error";
+            $productsCount = "Error";
             $usersCount    = 0;
+            log_message('error', 'Dashboard Error: ' . $e->getMessage());
         }
 
-        // Load the dashboard view with data (Passed as individual variables per your structure)
-        return view('/admin/dashboard', [
+        // Load the dashboard view with data
+        return view('admin/dashboard', [
             'requestsCount' => $requestsCount,
             'productsCount' => $productsCount,
             'usersCount'    => $usersCount,
-            'page_title'    => 'Gimmighoul | Admin Dashboard'
+            'page_title'    => 'RetroCrypt | Admin Dashboard',
+            // Passing 'counts' array as well to support your dashboard.php view structure
+            'counts'        => [
+                'requests' => $requestsCount,
+                'products' => $productsCount,
+                'users'    => $usersCount
+            ]
         ]);
     }
 
     public function showProductsPage()
     {
         try {
-            // Persist product to database using ProductModel
             $productModel = new ProductModel();
 
-            // Query all products that are active
+            // Query all non-deleted products
             $products = $productModel
-                ->where('is_active', 1)
                 ->orderBy('id', 'ASC')
                 ->findAll();
 
-            // Count all active products
-            $productsCount = $productModel
-                ->where('is_active', 1)
-                ->countAllResults();
+            // Count all products
+            $productsCount = $productModel->countAllResults();
 
-            // Count available products
+            // Count available products (is_available = 1)
             $availableProductsCount = $productModel
-                ->where('is_active', 1)
                 ->where('is_available', 1)
                 ->countAllResults();
 
-            // Count not available products
+            // Count hidden/unavailable products
             $notAvailableProductsCount = $productsCount - $availableProductsCount;
         } catch (\Exception $e) {
-            // Handle errors gracefully
             $products = [];
             $productsCount = $availableProductsCount = $notAvailableProductsCount = 0;
             log_message('error', 'Error fetching products: ' . $e->getMessage());
         }
 
-        // Load the admin/products view
-        return view('/admin/products', [
+        return view('admin/products', [
             'title' => 'Products',
             'active' => 'products',
             'products' => $products,
@@ -89,7 +91,6 @@ class Admin extends BaseController
     public function showAccountsPage()
     {
         try {
-            // Initialize UsersModel
             $userModel = new UsersModel();
 
             // Fetch active user accounts ordered by ID ascending
@@ -101,7 +102,7 @@ class Admin extends BaseController
             // Count all active accounts
             $accountsCount = $userModel->where('account_status', 1)->countAllResults();
 
-            // Count verified and non-verified email accounts
+            // Count verified emails
             $verifiedEmailAccountsCount = $userModel
                 ->where('account_status', 1)
                 ->where('email_activated', 1)
@@ -109,13 +110,11 @@ class Admin extends BaseController
 
             $nonVerifiedEmailAccountsCount = $accountsCount - $verifiedEmailAccountsCount;
         } catch (\Exception $e) {
-            // Handle errors gracefully
             $accounts = [];
             $accountsCount = $verifiedEmailAccountsCount = $nonVerifiedEmailAccountsCount = 0;
             log_message('error', 'Error fetching accounts: ' . $e->getMessage());
         }
 
-        // Load the admin/accounts view
         return view('admin/accounts', [
             'title' => 'Accounts',
             'active' => 'accounts',
@@ -144,61 +143,49 @@ class Admin extends BaseController
             $products = $productModel->findAll();
             $productMap = [];
             foreach ($products as $product) {
-                $productMap[$product->id] = $product->title;
+                // Note: RetroCrypt uses 'name', not 'title'
+                $productMap[$product['id']] = $product['name'];
             }
 
             // --- Load Requests with Product Join ---
+            // Joining on 'products.name' as product_name
             $requests = $requestModel
-                ->select('requests.*, products.title AS product_name')
+                ->select('requests.*, products.name AS product_name')
                 ->join('products', 'products.id = requests.product_id', 'left')
                 ->where('requests.is_active', 1)
-                ->orderBy('requests.id', 'ASC')
+                ->orderBy('requests.id', 'DESC') // Newer requests first usually
                 ->findAll();
-
-            // --- Attach Product Names ---
-            foreach ($requests as &$request) {
-                $request['product_name'] = $productMap[$request['product_id']] ?? 'Unknown';
-            }
-            unset($request);
 
             // --- Request Counts ---
             $requestsCount = $requestModel
                 ->where('is_active', 1)
                 ->countAllResults();
 
-            $today = date('Y-m-d');
-            $upcomingRequestsCount = $requestModel
-                ->where('is_active', 1)
-                ->where('preferred_date >=', $today)
-                ->countAllResults();
-
+            // Count "Pending" Requests
             $pendingRequestsCount = $requestModel
                 ->where('is_active', 1)
-                ->groupStart()
                 ->where('status', 'pending')
-                ->orWhere('status', 0)
-                ->groupEnd()
                 ->countAllResults();
         } catch (\Exception $e) {
-            // Optional: Log the error for debugging
             log_message('error', '[AdminController::showInquiriesPage] ' . $e->getMessage());
             $requests = [];
-            $requestsCount = $upcomingRequestsCount = $pendingRequestsCount = 0;
+            $requestsCount = $pendingRequestsCount = 0;
             $accountList = [];
         }
 
         // --- Return the view with all data ---
         return view('admin/inquiries', [
-            'requests'                => $requests,
-            'requestsCount'           => $requestsCount,
-            'upcomingRequestsCount'   => $upcomingRequestsCount,
-            'pendingRequestsCount'    => $pendingRequestsCount,
-            'accountList'             => $accountList
+            'requests'             => $requests,
+            'requestsCount'        => $requestsCount,
+            'pendingRequestsCount' => $pendingRequestsCount,
+            'accountList'          => $accountList,
+            // Kept for compatibility with your view structure, though we removed date logic
+            'upcomingRequestsCount' => 0
         ]);
     }
 
     /**
-     * Delete a User Account (NEW METHOD)
+     * Delete a User Account
      */
     public function deleteAccount($id)
     {
