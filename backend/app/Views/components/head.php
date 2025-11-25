@@ -11,6 +11,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
+        /* =========================================
+           1. GLOBAL RESET & BASE STYLES
+           ========================================= */
         * {
             margin: 0;
             padding: 0;
@@ -25,6 +28,9 @@
             direction: ltr;
         }
 
+        /* =========================================
+           2. SHARED LAYOUT (Header & Footer)
+           ========================================= */
         .header {
             position: relative;
             background-color: #f3daac;
@@ -92,6 +98,93 @@
             font-family: 'Scheherazade New', Arial, sans-serif;
         }
 
+        .footer {
+            background: #f3daac;
+            padding: 44px 0 20px 0;
+            width: 100%;
+            display: block;
+        }
+
+        .footer-content-ar {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 50px;
+        }
+
+        .footer-row-ar {
+            display: flex;
+            justify-content: flex-start;
+            gap: 100px;
+            width: 100%;
+            margin-bottom: 30px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 50px;
+        }
+
+        .footer-column-ar {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex: 0 1 auto;
+        }
+
+        .footer-title-ar {
+            color: #42221a;
+            font-size: 19px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            font-family: 'Scheherazade New', Arial, sans-serif;
+            letter-spacing: .6px;
+            text-align: left;
+        }
+
+        .footer-list-ar {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .footer-link-ar {
+            font-size: 15.5px;
+            font-weight: 500;
+            color: #681e1e;
+            text-decoration: none;
+            font-family: 'Scheherazade New', Arial, sans-serif;
+            transition: color 0.3s ease;
+            padding: 2px 0;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .footer-link-ar:hover {
+            color: #702524;
+            text-decoration: underline;
+        }
+
+        .footer-divider-ar {
+            width: 100%;
+            height: 1px;
+            background-color: #702524;
+            margin: 22px 0 10px 0;
+        }
+
+        .footer-description-ar {
+            font-size: 14px;
+            color: #42221a;
+            font-family: 'Scheherazade New', Arial, sans-serif;
+            margin-bottom: 12px;
+            text-align: left;
+            line-height: 1.6;
+        }
+
+        /* =========================================
+           3. LANDING PAGE STYLES (Restored)
+           ========================================= */
         .hero-section {
             position: relative;
             width: 100%;
@@ -559,89 +652,228 @@
             }
         }
 
-        /* Footer */
-        .footer {
-            background: #f3daac;
-            padding: 44px 0 20px 0;
-            width: 100%;
-            display: block;
+        /* =========================================
+           4. ROADMAP SPECIFIC STYLES
+           ========================================= */
+        .rm-page-bg {
+            background: linear-gradient(180deg, #f5f5f5 0%, #e8dcc5 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
-        .footer-content-ar {
-            max-width: 1200px;
+        .rm-hero {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #610e0e 0%, #4c0404 50%, #8b2f2e 100%);
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .rm-hero-overlay {
+            position: absolute;
+            inset: 0;
+            opacity: 0.1;
+            background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(243, 218, 172, 0.3) 2px, rgba(243, 218, 172, 0.3) 4px);
+        }
+
+        .rm-hero-content {
+            position: relative;
+            z-index: 10;
             margin: 0 auto;
-            padding: 0 50px;
+            padding: 0 24px;
+            max-width: 1024px;
         }
 
-        .footer-row-ar {
-            display: flex;
-            justify-content: flex-start;
-            gap: 100px;
-            width: 100%;
-            margin-bottom: 30px;
-            max-width: 1200px;
-            margin-left: auto;
-            margin-right: auto;
-            padding-left: 50px;
-        }
-
-        .footer-column-ar {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            flex: 0 1 auto;
-        }
-
-        .footer-title-ar {
-            color: #42221a;
-            font-size: 19px;
+        .rm-pill-label {
+            display: inline-block;
+            margin-bottom: 16px;
+            padding: 8px 32px;
+            border-radius: 999px;
+            background: rgba(243, 218, 172, 0.2);
+            border: 2px solid #f3daac;
+            color: #f3daac;
+            font-family: 'Tajawal', sans-serif;
             font-weight: 700;
-            margin-bottom: 12px;
-            font-family: 'Scheherazade New', Arial, sans-serif;
-            letter-spacing: .6px;
-            text-align: left;
+            font-size: 14px;
+            letter-spacing: 2px;
         }
 
-        .footer-list-ar {
-            list-style: none;
-            padding: 0;
-            margin: 0;
+        .rm-hero-title {
+            margin-bottom: 16px;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 700;
+            color: #f5e6c8;
+            font-size: 48px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+        }
+
+        .rm-hero-desc {
+            font-family: 'Scheherazade New', serif;
+            color: #f3daac;
+            font-size: 18px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .rm-border-bottom {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            height: 8px;
+            background: repeating-linear-gradient(90deg, #f3daac 0px, #f3daac 20px, #c9a669 20px, #c9a669 40px);
+        }
+
+        .rm-container {
+            margin: 0 auto;
+            padding: 48px 24px;
+            max-width: 1024px;
+        }
+
+        .rm-filter-bar {
             display: flex;
-            flex-direction: column;
-            gap: 4px;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            padding: 24px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #f5e6c8 0%, #f3daac 100%);
+            border: 3px solid #702524;
         }
 
-        .footer-link-ar {
-            font-size: 15.5px;
-            font-weight: 500;
-            color: #681e1e;
-            text-decoration: none;
-            font-family: 'Scheherazade New', Arial, sans-serif;
-            transition: color 0.3s ease;
-            padding: 2px 0;
-            text-align: left;
+        .rm-filter-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .rm-filter-label {
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 700;
+            color: #702524;
+            font-size: 15px;
+        }
+
+        .rm-select {
+            padding: 8px 16px;
+            border: 2px solid #702524;
+            border-radius: 8px;
+            font-family: 'Scheherazade New', serif;
+            font-size: 14px;
+            color: #42221a;
+            background: white;
             cursor: pointer;
         }
 
-        .footer-link-ar:hover {
-            color: #702524;
-            text-decoration: underline;
-        }
-
-        .footer-divider-ar {
-            width: 100%;
-            height: 1px;
-            background-color: #702524;
-            margin: 22px 0 10px 0;
-        }
-
-        .footer-description-ar {
-            font-size: 14px;
+        .rm-filter-note {
+            font-family: 'Scheherazade New', serif;
             color: #42221a;
-            font-family: 'Scheherazade New', Arial, sans-serif;
+            font-size: 14px;
+        }
+
+        .rm-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Card Styles */
+        .rm-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            transition: all 0.3s ease;
+            border: 3px solid rgba(112, 37, 36, 0.3);
+            position: relative;
+        }
+
+        .rm-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .rm-card-header {
+            height: 140px;
+            background: linear-gradient(135deg, #8b2f2e 0%, #610e0e 50%, #4c0404 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .rm-card-pattern {
+            position: absolute;
+            inset: 0;
+            opacity: 0.1;
+            background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(243, 218, 172, 0.5) 2px, rgba(243, 218, 172, 0.5) 4px);
+        }
+
+        .rm-badges {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            left: 16px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .rm-badge {
+            padding: 6px 16px;
+            border-radius: 999px;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 700;
+            font-size: 13px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .rm-badge-timeline {
+            position: absolute;
+            bottom: 16px;
+            left: 16px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            background: rgba(243, 218, 172, 0.95);
+            color: #702524;
+            font-family: 'Scheherazade New', serif;
+            font-weight: 700;
+            font-size: 13px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .rm-card-body {
+            padding: 24px;
+            background: linear-gradient(180deg, #ffffff 0%, #f5f5f5 100%);
+        }
+
+        .rm-card-title {
             margin-bottom: 12px;
-            text-align: left;
-            line-height: 1.6;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 700;
+            color: #702524;
+            font-size: 24px;
+            line-height: 1.3;
+        }
+
+        .rm-card-excerpt {
+            margin-bottom: 16px;
+            font-family: 'Scheherazade New', serif;
+            color: #42221a;
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        .rm-card-footer-line {
+            height: 4px;
+            background: linear-gradient(90deg, #f3daac 0%, #c9a669 50%, #f3daac 100%);
+        }
+
+        @media (max-width: 768px) {
+            .rm-filter-bar {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
         }
     </style>
 </head>
