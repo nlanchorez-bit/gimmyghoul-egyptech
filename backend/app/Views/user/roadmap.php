@@ -64,14 +64,6 @@
             ]) ?>
 
             <?= view('components/cards/roadmap_card', [
-                'title'    => 'Inventory Management System',
-                'excerpt'  => 'Track product stock levels, manage inventory updates, and receive low-stock alerts.',
-                'status'   => 'Planned',
-                'priority' => 'Medium',
-                'timeline' => 'Phase 3 - Q3 2024'
-            ]) ?>
-
-            <?= view('components/cards/roadmap_card', [
                 'title'    => 'Product Review System',
                 'excerpt'  => 'Allow customers to leave reviews and ratings for products.',
                 'status'   => 'Backlog',
