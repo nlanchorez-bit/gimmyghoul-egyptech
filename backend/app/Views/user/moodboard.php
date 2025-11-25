@@ -2,6 +2,8 @@
 <html lang="en">
 
 <?= $this->include('components/head') ?>
+<?= $this->include('components/header') ?>
+
 
 <body>
     <style>
@@ -736,6 +738,8 @@
         </section>
 
     </main>
+
+    <?= $this->include('components/footer') ?>
 
 </body>
 
