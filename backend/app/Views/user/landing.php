@@ -6,9 +6,8 @@
 
 <!-- Hero Section -->
 <section class="hero-section">
-    <div class="hero-logo">Insert Logo Here</div>
-    <h1 class="hero-title">Gimmighoul</h1>
-    <p class="hero-subtitle">Egypt's Digital Heritage Portal · Knowledge Bank for Heritage and Modern Egyptian History</p>
+    <h1 class="hero-title"></h1>
+    <p class="hero-subtitle"></p>
 </section>
 
 <!-- Quick Access -->
@@ -18,13 +17,13 @@
 <section class="ps5-section">
     <div class="ps5-image">
         <div class="ps5-image-container">
-            <img src="https://cdn.mos.cms.futurecdn.net/jjvkMQXMWXhtRzTxoMS67G.jpg" alt="PlayStation 5">
+            <img src="https://i.imgur.com/2aALxX2.png" alt="PlayStation 5">
         </div>
     </div>
     <div class="ps5-content">
-        <h2>Introducing the PS5 console and accessories</h2>
-        <h3>PlayStation 5 Console</h3>
-        <p>Experience an all-new generation of incredible PlayStation games.</p>
+        <h2>Change this Please</h2>
+        <h3>asdasdasdadsadsad</h3>
+        <p>Placeholder Text aaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
         <button class="cta-button">Find out more</button>
     </div>
 </section>
@@ -36,19 +35,19 @@
             <div class="scroll-card-badge">New</div>
             <div class="scroll-card-image-wrapper">
                 <!-- Added placeholder logic just in case src is empty -->
-                <img src="" alt="Insert Image Here" onerror="this.style.display='none'">
+                <img src="https://i.imgur.com/Dh0cDw8.png" alt="https://i.imgur.com/Dh0cDw8.png" onerror="this.style.display='none'">
             </div>
         </div>
         <div class="scroll-card">
             <div class="scroll-card-badge">Exclusive</div>
             <div class="scroll-card-image-wrapper">
-                <img src="" alt="Insert Image Here" onerror="this.style.display='none'">
+                <img src="https://i.imgur.com/sYTVXxv.png" alt="https://i.imgur.com/sYTVXxv.png" onerror="this.style.display='none'">
             </div>
         </div>
         <div class="scroll-card">
             <div class="scroll-card-badge">Essential</div>
             <div class="scroll-card-image-wrapper">
-                <img src="" alt="Insert Image Here" onerror="this.style.display='none'">
+                <img src="https://i.imgur.com/dud5o3x.png" alt="https://i.imgur.com/dud5o3x.png" onerror="this.style.display='none'">
             </div>
         </div>
     </div>

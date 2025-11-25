@@ -189,7 +189,7 @@
             position: relative;
             width: 100%;
             height: 600px;
-            background-image: url('https://ecommerce.datablitz.com.ph/cdn/shop/files/Resident-Evil-Requiem-ecom-SLIDING_80b649fd-6588-42ae-adfa-6568f8add44d_1800x.jpg?v=1763699798');
+            background-image: url('https://i.imgur.com/L2ge1aV.png');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -261,7 +261,7 @@
             margin: 0;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 80px;
+            gap: 50px;
             align-items: center;
             min-height: 100vh;
         }
