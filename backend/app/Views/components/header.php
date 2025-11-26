@@ -33,5 +33,4 @@
             <!-- Sign Up Button as a Link -->
             <a href="<?= site_url('signup') ?>" class="signup-btn" style="text-decoration: none;">Sign Up</a>
         <?php endif; ?>
-    </div>
 </header>
