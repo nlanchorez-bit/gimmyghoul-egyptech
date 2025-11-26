@@ -68,9 +68,9 @@ These are **sample modules** included (or suggested) for learning how to add fea
 
 | Component                 | Purpose                                                             | Notes                                                   |
 | ------------------------- | ------------------------------------------------------------------- | ------------------------------------------------------- |
-| **Auth (Sample)**         | Basic login/logout and role check (admin/user).                     | Uses CI4 sessions + MySQL `users` table.                |
-| **CRUD Module**           | Example entity (`Posts` or `Tasks`) with create/read/update/delete. | Demonstrates Controller → Service → Repository pattern. |
-| **Scheduler (Sample)**    | Simple to-do list with due dates.                                   | Shows how to extend with new tables and services.       |
+| **Authentication Module**         | Handles user registration, secure login/logout, and role-based access (Admin vs. Client).                     | Uses Auth Controller, UsersModel with BCrypt hashing, and Session guards for security           |
+| **Shop & Inventory CRUD**           | Allows users to list (upload) new consoles/items for sale and Admins to manage/delete listings. | Implemented in Shop Controller. Handles file uploads (main_image), slugs, and ProductModel CRUD. |
+| **Order Request System**    | Manages the "Buy Now" workflow, stock validation, and the Admin approval/declining of orders.                                  | Uses Requests Controller and RequestsModel. Tracks status (pending, approved) and links Users to Products.       |
 
  <!-- ! Start simple. Use these modules as **learning samples**; extend or replace them based on your project’s needs. -->
 
@@ -91,9 +91,6 @@ These are **sample modules** included (or suggested) for learning how to add fea
 #### Databases
 
 ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge\&logo=mysql\&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?style=for-the-badge\&logo=postgresql\&logoColor=white)
-![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge\&logo=mongodb\&logoColor=white)
-![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge\&logo=firebase\&logoColor=black)
 
 <!-- ! Keep only the used technology -->
 
