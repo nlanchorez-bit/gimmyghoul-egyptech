@@ -5,17 +5,18 @@
             <div class="footer-column-ar">
                 <h3 class="footer-title-ar">Menu</h3>
                 <ul class="footer-list-ar">
-                    <li><a href="#" class="footer-link-ar">Home</a></li>
-                    <li><a href="#" class="footer-link-ar">Games</a></li>
-                    <li><a href="#" class="footer-link-ar">Accessories</a></li>
-                    <li><a href="#" class="footer-link-ar">About Us</a></li>
+                    <li><a href="<?= base_url('/') ?>" class="footer-link-ar">Home</a></li>
+                    <li><a href="<?= base_url('shop') ?>" class="footer-link-ar">Games</a></li>
+                    <li><a href="<?= base_url('accessories') ?>" class="footer-link-ar">Accessories</a></li>
+                    <li><a href="<?= base_url('about-us') ?>" class="footer-link-ar">About Us</a></li>
                 </ul>
             </div>
             <div class="footer-column-ar">
                 <h3 class="footer-title-ar">Company</h3>
                 <ul class="footer-list-ar">
-                    <li><a href="#" class="footer-link-ar">Mood Board</a></li>
-                    <li><a href="#" class="footer-link-ar">Road Map</a></li>
+                    <!-- Updated Links for Mood Board and Road Map -->
+                    <li><a href="<?= base_url('moodboard') ?>" class="footer-link-ar">Mood Board</a></li>
+                    <li><a href="<?= base_url('roadmap') ?>" class="footer-link-ar">Road Map</a></li>
                 </ul>
             </div>
             <div class="footer-column-ar">
