@@ -3,112 +3,100 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use App\Models\ProductReviewsModel;
-use App\Models\ProductsModel;
-use CodeIgniter\HTTP\ResponseInterface;
+use App\Models\ProductsReviewModel;
+use App\Models\ProductModel;
+use CodeIgniter\API\ResponseTrait;
 
 class Reviews extends BaseController
 {
-    /**
-     * Handle the submission of a new review.
-     * Usually POSTed from the Product Details page.
-     */
-    public function submit()
+    use ResponseTrait;
+
+    public function add()
     {
         $session = session();
-        $request = \Config\Services::request();
 
-        // 1. Security Check: Must be logged in
-        if (!$session->get('isLoggedIn')) {
-            if ($request->isAJAX()) {
-                return $this->response->setStatusCode(401)->setJSON(['success' => false, 'message' => 'Please login to leave a review.']);
-            }
-            return redirect()->to('/login')->with('error', 'You must be logged in to leave a review.');
+        if (!$session->has('user')) {
+            return redirect()->back()->with('error', 'You must be logged in to write a review.');
         }
 
-        $reviewsModel = new ProductReviewsModel();
-        $productsModel = new ProductsModel();
+        $userId = $session->get('user')['id'];
+        $productId = $this->request->getPost('product_id');
 
-        // 2. Get Input Data
-        $productId = $request->getPost('product_id');
-        $rating    = $request->getPost('rating');
-        $comment   = $request->getPost('comment');
-        $userId    = $session->get('id');
+        $model = new ProductsReviewModel();
+        $productModel = new ProductModel();
 
-        // 3. Validation Rules
-        $rules = [
-            'product_id' => 'required|is_natural_no_zero',
-            'rating'     => 'required|integer|greater_than_equal_to[1]|less_than_equal_to[5]',
-            'comment'    => 'required|min_length[5]|max_length[1000]',
-        ];
-
-        if (!$this->validate($rules)) {
-            $errors = $this->validator->getErrors();
-
-            if ($request->isAJAX()) {
-                return $this->response->setStatusCode(422)->setJSON(['success' => false, 'errors' => $errors]);
-            }
-            return redirect()->back()->withInput()->with('errors', $errors);
-        }
-
-        // 4. Prepare Data
-        $data = [
+        $model->save([
             'product_id' => $productId,
             'user_id'    => $userId,
-            'rating'     => $rating,
-            'comment'    => $comment,
-            'status'     => 'published', // Default status, or set to 'pending' if you want moderation
-        ];
+            'rating'     => $this->request->getPost('rating'),
+            'comment'    => $this->request->getPost('comment'),
+            'status'     => 'published',
+        ]);
 
-        // 5. Save to Database
-        try {
-            if ($reviewsModel->save($data)) {
+        $product = $productModel->find($productId);
+        // Handle array vs object depending on return type
+        $slug = is_array($product) ? $product['slug'] : $product->slug;
 
-                // Fetch product to get the slug for redirect
-                $product = $productsModel->find($productId);
-                $redirectUrl = $product ? base_url("products/details/{$product->slug}") : base_url('products');
-
-                if ($request->isAJAX()) {
-                    return $this->response->setJSON([
-                        'success'  => true,
-                        'message'  => 'Review posted successfully!',
-                        'redirect' => $redirectUrl
-                    ]);
-                }
-
-                return redirect()->to($redirectUrl)->with('success', 'Review posted successfully!');
-            } else {
-                throw new \Exception('Failed to save review.');
-            }
-        } catch (\Exception $e) {
-            if ($request->isAJAX()) {
-                return $this->response->setStatusCode(500)->setJSON(['success' => false, 'message' => 'Server Error: ' . $e->getMessage()]);
-            }
-            return redirect()->back()->withInput()->with('error', 'An error occurred while posting your review.');
-        }
+        return redirect()->to("product/{$slug}")->with('success', 'Review added successfully.');
     }
 
-    /**
-     * Delete a review (Optional: For users to delete their own review)
-     */
+    public function edit($id)
+    {
+        $session = session();
+
+        if (!$session->has('user')) {
+            return $this->failUnauthorized('Not logged in');
+        }
+
+        $userId = $session->get('user')['id'];
+        $model = new ProductsReviewModel();
+        $review = $model->find($id);
+
+        if (!$review) {
+            return $this->failNotFound('Review not found');
+        }
+
+        // Ensure user owns the review
+        $reviewOwner = is_array($review) ? $review['user_id'] : $review->user_id;
+
+        if ($reviewOwner != $userId) {
+            return $this->failForbidden('Cannot edit this review');
+        }
+
+        // Update
+        $model->update($id, [
+            'rating'  => $this->request->getPost('rating'),
+            'comment' => $this->request->getPost('comment'),
+        ]);
+
+        return $this->respond(['success' => true, 'message' => 'Review updated']);
+    }
+
     public function delete($id)
     {
         $session = session();
-        $reviewsModel = new ProductReviewsModel();
+        if (!$session->has('user')) {
+            return redirect()->to('/login')->with('error', 'Not logged in');
+        }
 
-        $review = $reviewsModel->find($id);
+        $userId = $session->get('user')['id'];
+        $userType = $session->get('user')['type'];
+
+        $model = new ProductsReviewModel();
+        $review = $model->find($id);
 
         if (!$review) {
-            return redirect()->back()->with('error', 'Review not found.');
+            return redirect()->back()->with('error', 'Review not found');
         }
 
-        // Security: Ensure only the owner (or admin) can delete
-        if ($review->user_id != $session->get('id') && $session->get('role') !== 'admin') {
-            return redirect()->back()->with('error', 'Unauthorized action.');
+        $reviewOwner = is_array($review) ? $review['user_id'] : $review->user_id;
+
+        // Allow Owner OR Admin to delete
+        if ($reviewOwner != $userId && $userType !== 'admin') {
+            return redirect()->back()->with('error', 'Cannot delete this review');
         }
 
-        $reviewsModel->delete($id);
-
-        return redirect()->back()->with('success', 'Review deleted.');
+        $model->delete($id);
+        return redirect()->back()->with('success', 'Review deleted successfully');
     }
 }

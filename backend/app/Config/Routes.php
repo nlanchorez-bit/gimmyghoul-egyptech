@@ -64,3 +64,8 @@ $routes->post('/signup', 'Auth::signup');
 // --- Product Reviews ---
 $routes->post('reviews/submit', 'Reviews::submit');             // Submit a review
 $routes->get('reviews/delete/(:num)', 'Reviews::delete/$1');    // Delete a review
+
+// --- Product Reviews ---
+$routes->post('reviews/add', 'Reviews::add');                   // Add new
+$routes->post('reviews/edit/(:num)', 'Reviews::edit/$1');       // Edit existing (AJAX)
+$routes->get('reviews/delete/(:num)', 'Reviews::delete/$1');    // Delete
