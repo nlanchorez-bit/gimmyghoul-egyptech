@@ -5,21 +5,19 @@
 
 <div align="center">
   <a href="https://github.com/zyx-0314/">
-    <img src="./assets/img/nyebe_white.png" alt="Nyebe" width="130" height="100">
   </a>
 <!-- * Title Section -->
-  <h3 align="center">AD - CI4 Template</h3>
+  <h3 align="center">RetroSale</h3>
 </div>
 
 <!-- * Description Section -->
 <div align="center">
-This repository is a beginner-friendly CodeIgniter 4 template.  
-It helps teams quickly bootstrap backend + frontend projects, with simple sample modules that show how to extend the system.
+RetroSale offers old school video games ranging from PS1, PS2, Wii, DS, and 3DS offering you to relive old games and enjoy a wide history of games!
 </div>
 
 <br/>
 
-![](https://visit-counter.vercel.app/counter.png?page=zyx-0314/ci4-template)
+![](https://visit-counter.vercel.app/counter.png?page=nlanchorez-bit/gimmyghoul-egyptech)
 
 <!-- ! Make sure it was similar to your github -->
 
@@ -55,12 +53,12 @@ It helps teams quickly bootstrap backend + frontend projects, with simple sample
 
 ## Overview
 
-This template provides a **minimal CodeIgniter 4 project layout** with conventions for file organization, commit practices, and simple modules.
+This project provides a modern front-end layout for Retrosale, an online store specializing in retro consoles, games, and gadgets — such as Nintendo 3DS, DS, PS1, PS2, Wii, and digital cameras.
 
-It is designed to be **easy to start with** and a **reference for adding new features**.
+It is designed to be clean, reusable, and modular, allowing for easy customization and consistent UI across all pages.
 
-* **Purpose**: a clean starting point for CI4 apps.
-* **Audience**: developers who want a predictable structure and quick onboarding.
+Purpose: To deliver a visually consistent and user-friendly interface for showcasing retro gaming products.
+Audience: Developers and designers building or extending Retrosale’s e-commerce frontend.
 
 ### Key Components
 
