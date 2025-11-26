@@ -28,6 +28,46 @@
             direction: ltr;
         }
 
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            line-height: 1.5;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #8b2f2e 0%, #702524 100%);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-size: 16px;
+            box-shadow: 0 4px 12px rgba(112, 37, 36, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(112, 37, 36, 0.4);
+            color: white;
+            background: linear-gradient(135deg, #a03635 0%, #8b2f2e 100%);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #702524;
+            border: 1px solid #e0e0e0;
+        }
+
+        .btn-secondary:hover {
+            background: #f9f9f9;
+            color: #8b2f2e;
+        }
+
         /* =========================================
            2. SHARED LAYOUT (Header & Footer)
            ========================================= */

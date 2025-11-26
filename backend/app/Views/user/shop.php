@@ -16,8 +16,13 @@
             <!-- NEW: Upload Button (Visible to logged-in users) -->
             <?php if (session()->has('user')): ?>
                 <div style="margin-top: 25px;">
+                    <!-- Updated: Added SVG icon and ensured styling classes exist -->
                     <a href="<?= base_url('shop/upload') ?>" class="btn btn-primary">
-                        <i class="fas fa-plus" style="margin-right: 8px;"></i> Sell Your Console
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;">
+                            <path d="M5 12h14" />
+                            <path d="M12 5v14" />
+                        </svg>
+                        Sell Your Console
                     </a>
                 </div>
             <?php endif; ?>
