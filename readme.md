@@ -69,6 +69,7 @@ These are **sample modules** included (or suggested) for learning how to add fea
 | **Authentication Module**         | Handles user registration, secure login/logout, and role-based access (Admin vs. Client).                     | Uses Auth Controller, UsersModel with BCrypt hashing, and Session guards for security           |
 | **Shop & Inventory CRUD**           | Allows users to list (upload) new consoles/items for sale and Admins to manage/delete listings. | Implemented in Shop Controller. Handles file uploads (main_image), slugs, and ProductModel CRUD. |
 | **Order Request System**    | Manages the "Buy Now" workflow, stock validation, and the Admin approval/declining of orders.                                  | Uses Requests Controller and RequestsModel. Tracks status (pending, approved) and links Users to Products.       |
+| **Product Reviews System**    |Enables users to rate (1-5 stars) and review products. Includes AJAX-based editing and deletion for own reviews.                                  | Uses Reviews Controller, ProductReviewsModel, and a modern modal interface for user interaction.       |
 
  <!-- ! Start simple. Use these modules as **learning samples**; extend or replace them based on your project’s needs. -->
 
