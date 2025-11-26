@@ -7,12 +7,12 @@
   <a href="https://github.com/zyx-0314/">
   </a>
 <!-- * Title Section -->
-  <h3 align="center">RetroSale</h3>
+  <h3 align="center">RetroCrypt</h3>
 </div>
 
 <!-- * Description Section -->
 <div align="center">
-RetroSale offers old school video games ranging from PS1, PS2, Wii, DS, and 3DS offering you to relive old games and enjoy a wide history of games!
+RetroCrypt offers old school video games ranging from PS1, PS2, Wii, DS, and 3DS offering you to relive old technology and enjoy a wide history of games! 
 </div>
 
 <br/>
@@ -53,7 +53,7 @@ RetroSale offers old school video games ranging from PS1, PS2, Wii, DS, and 3DS 
 
 ## Overview
 
-This project provides a modern front-end layout for Retrosale, an online store specializing in retro consoles, games, and gadgets — such as Nintendo 3DS, DS, PS1, PS2, Wii, and digital cameras.
+This project provides a modern front-end layout for RetroCrypt, an online store specializing in retro consoles, games, and gadgets — such as Nintendo 3DS, DS, PS1, PS2, Wii, and digital cameras.
 
 It is designed to be clean, reusable, and modular, allowing for easy customization and consistent UI across all pages.
 
