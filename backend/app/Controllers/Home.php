@@ -29,7 +29,7 @@ class Home extends BaseController
     public function support(): string
     {
         $data = ['page_title' => 'Gimmighoul | Support'];
-        return view('user/landing', $data);
+        return view('user/support', $data);
     }
 
     public function about(): string
