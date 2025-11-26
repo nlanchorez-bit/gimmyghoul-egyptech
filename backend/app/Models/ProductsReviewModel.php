@@ -4,7 +4,7 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class ProductReviewsModel extends Model
+class ProductsReviewModel extends Model
 {
     protected $table            = 'product_reviews';
     protected $primaryKey       = 'id';
