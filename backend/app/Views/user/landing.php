@@ -21,9 +21,9 @@
         </div>
     </div>
     <div class="ps5-content">
-        <h2>Change this Please</h2>
-        <h3>asdasdasdadsadsad</h3>
-        <p>Placeholder Text aaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
+        <h2>RetroCrypt's Finest</h2>
+        <h3>Pharaoh's Recommended!</h3>
+        <p>We sell retro consoles, camera, and other gadgets all blessed by sun god Ra.</p>
         <button class="cta-button">Find out more</button>
     </div>
 </section>
@@ -56,7 +56,7 @@
 <!-- About Us moved above footer -->
 <section class="content-section">
     <h2>About Us</h2>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat</p>
+    <p>RetroCrypt is a platform where your gadgets can be sold with a thriving community of egyptian gods and goddesses. We sell and resells all sorts of gadgets from retro consoles, camera, ipods, and other gadgets available from river nile and back.</p>
     <div class="content-types">
         <?php
         // Example of Dynamic PHP Loop for repetitive content
@@ -67,7 +67,7 @@
                 <div class="content-icon">
                     <span class="content-icon-text"></span>
                 </div>
-                <p>Insert Text</p>
+                <p></p>
             </div>
         <?php endforeach; ?>
     </div>
