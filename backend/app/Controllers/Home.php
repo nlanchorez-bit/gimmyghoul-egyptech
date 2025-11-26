@@ -35,7 +35,7 @@ class Home extends BaseController
     public function about(): string
     {
         $data = ['page_title' => 'Gimmighoul | About Us'];
-        return view('user/landing', $data);
+        return view('user/about', $data);
     }
 
     // User/Auth Pages
