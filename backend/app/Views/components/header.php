@@ -10,7 +10,15 @@
     <!-- User area pushed to upper right -->
     <div style="display:flex; gap:0.75rem; align-items:center; margin-left:auto;">
         <?php if (session()->has('user')): ?>
-            <?php $user = session()->get('user'); ?>
+            <?php
+            $user = session()->get('user');
+            // Determine display name and avatar from session data
+            $displayName = $user['first_name'] ?? $user['username'] ?? 'Pharaoh User';
+            $userEmail = $user['email'] ?? 'user@retrocrypt.com';
+            // Check for profile_image or avatar key
+            $profileImg = $user['profile_image'] ?? $user['avatar'] ?? null;
+            ?>
+
             <!-- Logged-in state with Profile Dropdown -->
             <div style="position: relative;">
                 <!-- Profile Button -->
@@ -18,11 +26,17 @@
                     id="profileButton"
                     type="button"
                     style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background-color: transparent; border: 2px solid #C4B454; border-radius: 4px; color: #8B4513; cursor: pointer; transition: all 0.2s;">
-                    <!-- Egyptian-style avatar -->
-                    <div style="display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; background-color: #C4B454; border-radius: 50%; border: 2px solid #8B4513; font-size: 18px;">
-                        𓀀
+
+                    <!-- Avatar Container (Small) -->
+                    <div style="width: 32px; height: 32px; background-color: #C4B454; border-radius: 50%; border: 2px solid #8B4513; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                        <?php if ($profileImg): ?>
+                            <img src="<?= esc($profileImg) ?>" alt="Profile" style="width: 100%; height: 100%; object-fit: cover;">
+                        <?php else: ?>
+                            <span style="font-size: 18px;">𓀀</span>
+                        <?php endif; ?>
                     </div>
-                    <span><?= esc($user['username'] ?? 'Pharaoh User') ?></span>
+
+                    <span><?= esc($displayName) ?></span>
                     <svg id="dropdownArrow" style="width: 16px; height: 16px; transition: transform 0.2s;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                     </svg>
@@ -38,12 +52,18 @@
                     <!-- Profile Info -->
                     <div style="padding: 1rem; border-bottom: 2px solid #C4B454;">
                         <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
-                            <div style="display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; background-color: #C4B454; border-radius: 50%; border: 3px solid #8B4513; font-size: 24px;">
-                                𓀀
+                            <!-- Avatar Container (Large) -->
+                            <div style="width: 48px; height: 48px; background-color: #C4B454; border-radius: 50%; border: 3px solid #8B4513; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                                <?php if ($profileImg): ?>
+                                    <img src="<?= esc($profileImg) ?>" alt="Profile" style="width: 100%; height: 100%; object-fit: cover;">
+                                <?php else: ?>
+                                    <span style="font-size: 24px;">𓀀</span>
+                                <?php endif; ?>
                             </div>
-                            <div>
-                                <div style="color: #8B4513; font-weight: 500;"><?= esc($user['username'] ?? 'Pharaoh User') ?></div>
-                                <div style="color: #8B7355; font-size: 14px;"><?= esc($user['email'] ?? 'user@retrocrypt.com') ?></div>
+
+                            <div style="overflow: hidden;">
+                                <div style="color: #8B4513; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?= esc($displayName) ?></div>
+                                <div style="color: #8B7355; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?= esc($userEmail) ?></div>
                             </div>
                         </div>
 
@@ -55,7 +75,7 @@
                         </div>
                     </div>
 
-                    <!-- Menu Items (only profile now) -->
+                    <!-- Menu Items -->
                     <div style="padding: 0.5rem 0;">
                         <a
                             href="<?= site_url('profile') ?>"

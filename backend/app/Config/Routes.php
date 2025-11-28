@@ -5,67 +5,69 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
+
+// Home
 $routes->get('/', 'Home::index');
 
-// --- BUYER ROUTES (Public/User) ---
-$routes->get('checkout/(:num)', 'Requests::checkout/$1');
-$routes->post('requests/placeOrder', 'Requests::placeOrder');
-$routes->get('requests/success', 'Requests::success');
-
-// --- ADMIN ROUTES ---
-$routes->group('admin', function ($routes) {
-    $routes->get('/', 'Admin::showDashboardPage');
-
-    // Admin -> Requests Management
-    $routes->get('requests', 'Admin::showInquiriesPage');
-    $routes->get('requests/approve/(:num)', 'Admin::approveRequest/$1'); // New
-    $routes->get('requests/delete/(:num)', 'Admin::deleteRequest/$1');   // New
-
-    // Admin -> Users
-    $routes->get('users', 'Admin::showAccountsPage');
-    $routes->get('accounts', 'Admin::showAccountsPage');
-    $routes->get('accounts/delete/(:num)', 'Admin::deleteAccount/$1');
-});
-
 // --- Public Pages ---
-$routes->get('games', 'Home::games');
-$routes->get('games', 'Shop::index'); // Note: This overwrites the previous 'games' route
+$routes->get('games', 'Shop::index');
 $routes->get('shop', 'Shop::index');
 $routes->get('accessories', 'Home::accessories');
 $routes->get('support', 'Home::support');
 $routes->get('about-us', 'Home::about');
 
 // --- Auth & Features ---
+$routes->get('login', 'Home::login');
+$routes->get('signup', 'Home::signup');
 $routes->get('moodboard', 'Home::moodboard');
 $routes->get('roadmap', 'Home::roadmap');
 
-// --- Shop Actions ---
-$routes->get('shop/upload', 'Shop::create');       // Show upload form
-$routes->post('shop/store', 'Shop::store');        // Process upload
-$routes->get('shop/delete/(:num)', 'Shop::delete/$1'); // Delete item
+// --- Profile Routes ---
+$routes->get('profile', 'Home::profile');
+$routes->post('profile/update', 'Home::updateProfile');
+$routes->post('profile/upload-avatar', 'Home::uploadAvatar');
 
-// FIX: Point this to Shop::details, not Products::details
+// --- SHOP / BUYER ACTIONS ---
 $routes->get('product/(:segment)', 'Shop::details/$1');
+$routes->get('shop/upload', 'Shop::create');
+$routes->post('shop/store', 'Shop::store');
+$routes->get('shop/delete/(:num)', 'Shop::delete/$1');
 
-// --- Checkout & Orders (Required for "Buy Now" button) ---
-// Note: These were duplicated in your previous snippet, removed duplicates here.
-// They are already defined at the top under "BUYER ROUTES".
+$routes->get('checkout/(:num)', 'Requests::checkout/$1');
+$routes->post('requests/placeOrder', 'Requests::placeOrder');
+$routes->get('requests/success', 'Requests::success');
 
-// --- Admin Dashboard (Legacy/Duplicate route, kept for safety) ---
-$routes->get('/admin/dashboard', 'Admin::showDashboardPage');
-
-// Authentication
+// --- AUTHENTICATION ---
 $routes->get('/login', 'Auth::showLoginPage');
 $routes->post('/login', 'Auth::login');
 $routes->post('/logout', 'Auth::logout');
 $routes->get('/signup', 'Auth::showSignupPage');
 $routes->post('/signup', 'Auth::signup');
 
-// --- Product Reviews ---
-$routes->post('reviews/submit', 'Reviews::submit');             // Submit a review
-$routes->get('reviews/delete/(:num)', 'Reviews::delete/$1');    // Delete a review
+// --- ADMIN ROUTES ---
+$routes->group('admin', function ($routes) {
+    $routes->get('/', 'Admin::showDashboardPage');
+    $routes->get('dashboard', 'Admin::showDashboardPage');
 
-// --- Product Reviews ---
-$routes->post('reviews/add', 'Reviews::add');                   // Add new
-$routes->post('reviews/edit/(:num)', 'Reviews::edit/$1');       // Edit existing (AJAX)
-$routes->get('reviews/delete/(:num)', 'Reviews::delete/$1');    // Delete
+    $routes->get('products', 'Admin::showProductsPage');
+
+    $routes->get('requests', 'Admin::showInquiriesPage');
+    $routes->get('requests/approve/(:num)', 'Admin::approveRequest/$1');
+    $routes->get('requests/delete/(:num)', 'Admin::deleteRequest/$1');
+
+    $routes->get('users', 'Admin::showAccountsPage');
+    $routes->get('accounts', 'Admin::showAccountsPage');
+    $routes->get('accounts/delete/(:num)', 'Admin::deleteAccount/$1');
+    $routes->get('accounts/edit/(:num)', 'Admin::editAccount/$1');
+    $routes->post('accounts/edit/(:num)', 'Admin::updateAccount/$1');
+});
+
+// --- REVIEWS ---
+$routes->post('reviews/submit', 'Reviews::submit');
+$routes->post('reviews/add', 'Reviews::add');
+$routes->post('reviews/edit/(:num)', 'Reviews::edit/$1');
+$routes->get('reviews/delete/(:num)', 'Reviews::delete/$1');
+
+if (is_file(APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php')) {
+    require APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php';
+}
