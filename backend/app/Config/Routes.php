@@ -48,6 +48,7 @@ $routes->post('/signup', 'Auth::signup');
 $routes->group('admin', function ($routes) {
     $routes->get('/', 'Admin::showDashboardPage');
     $routes->get('dashboard', 'Admin::showDashboardPage');
+    $routes->post('accounts/update', 'Admin::updateAccount');
 
     $routes->get('products', 'Admin::showProductsPage');
 

@@ -186,4 +186,52 @@ class Admin extends BaseController
             return redirect()->to('/admin/accounts')->with('error', 'Failed to delete user.');
         }
     }
+
+    /**
+     * Action: Update User Account (AJAX)
+     */
+    public function updateAccount()
+    {
+        $request = \Config\Services::request();
+
+        if (!$request->isAJAX()) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Invalid request']);
+        }
+
+        $id = $request->getPost('id');
+        $validation = \Config\Services::validation();
+
+        $rules = [
+            'first_name' => 'required|min_length(2)',
+            'last_name'  => 'required|min_length(2)',
+            // Validate unique email but ignore current user's ID
+            'email'      => "required|valid_email|is_unique[users.email,id,{$id}]",
+            'type'       => 'required|in_list[admin,client]',
+            'status'     => 'required|in_list[active,banned]',
+        ];
+
+        if (!$this->validate($rules)) {
+            return $this->response->setJSON(['success' => false, 'message' => implode(', ', $this->validator->getErrors())]);
+        }
+
+        // Map status string back to integer for DB
+        $statusMap = ['active' => 1, 'banned' => 0];
+        $dbStatus = $statusMap[$request->getPost('status')] ?? 1;
+
+        $data = [
+            'first_name'     => $request->getPost('first_name'),
+            'last_name'      => $request->getPost('last_name'),
+            'email'          => $request->getPost('email'),
+            'type'           => $request->getPost('type'),
+            'account_status' => $dbStatus,
+            'gender'         => $request->getPost('gender'),
+        ];
+
+        $userModel = new UsersModel();
+        if ($userModel->update($id, $data)) {
+            return $this->response->setJSON(['success' => true]);
+        } else {
+            return $this->response->setJSON(['success' => false, 'message' => 'Database update failed']);
+        }
+    }
 }

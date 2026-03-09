@@ -421,7 +421,6 @@
 
         <div class="page-header">
             <h1 class="page-title">Manage User Base</h1>
-            </a>
         </div>
 
         <!-- Messages -->
@@ -520,6 +519,7 @@
         <h2 class="modal-title">Edit Account</h2>
 
         <form id="editAccountForm">
+            <?= csrf_field() ?> <!-- CRITICAL FIX: CSRF Token added -->
             <input type="hidden" name="id" id="editAccountId">
 
             <div class="form-group">
@@ -574,14 +574,15 @@
 
 <script>
     function openEditModal(user) {
-        // Populate form
+        // Populate form with existing data
         document.getElementById('editAccountId').value = user.id;
         document.getElementById('editFirstName').value = user.first_name;
         document.getElementById('editLastName').value = user.last_name;
         document.getElementById('editEmail').value = user.email;
         document.getElementById('editType').value = user.type;
-        document.getElementById('editStatus').value = user.account_status;
-        document.getElementById('editGender').value = user.gender;
+        // Check for loose equality to handle 1 vs "1"
+        document.getElementById('editStatus').value = (user.account_status == 1) ? '1' : '0';
+        document.getElementById('editGender').value = user.gender || '';
 
         // Show Modal with animation class
         const modal = document.getElementById('editAccountModal');
@@ -609,30 +610,40 @@
         }
     });
 
-    // AJAX form submission
+    // AJAX form submission with Error Handling
     document.getElementById('editAccountForm').addEventListener('submit', function(e) {
         e.preventDefault();
 
         let formData = new FormData(this);
-        let id = formData.get('id');
 
-        // Assuming route is /admin/accounts/edit/{id}
-        fetch('<?= site_url('admin/accounts/edit/') ?>' + id, {
+        // Uses the route: admin/accounts/update
+        fetch('<?= base_url('admin/accounts/update') ?>', {
                 method: 'POST',
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest'
                 },
                 body: formData
             })
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) {
+                    // Throw error if response is not 200 OK (e.g. 404 or 500)
+                    throw new Error("Server returned " + res.status + " " + res.statusText);
+                }
+                return res.json();
+            })
             .then(data => {
                 if (data.success) {
+                    alert('User updated successfully!');
                     location.reload();
                 } else {
-                    alert('Error: ' + (data.error || 'Unknown error'));
+                    // Show specific error from server, fallback to generic
+                    alert('Error: ' + (data.message || data.error || 'Unknown error occurred'));
                 }
             })
-            .catch(err => alert('Error: ' + err));
+            .catch(err => {
+                console.error(err);
+                alert('System Error: ' + err);
+            });
     });
 </script>
 
