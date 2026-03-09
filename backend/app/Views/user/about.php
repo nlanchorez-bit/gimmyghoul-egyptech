@@ -356,7 +356,7 @@
                     <div class="team-avatar">
                         <img src="https://i.pinimg.com/474x/14/03/21/14032137bfe515dd86f2a25710ab3647.jpg" alt="Nour">
                     </div>
-                    <div class="team-name">Chesca Bautista</div>
+                    <div class="team-name">Vince Arabe</div>
                     <div class="team-role">Frontend Developer</div>
                 </div>
             </div>
