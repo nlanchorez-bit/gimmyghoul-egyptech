@@ -74,10 +74,10 @@ class Auth extends BaseController
     public function signup()
     {
         $rules = [
-            'first_name' => 'required|min_length(2)',
-            'last_name'  => 'required|min_length(2)',
+            'first_name' => 'required|min_length[2]',
+            'last_name'  => 'required|min_length[2]',
             'email'      => 'required|valid_email|is_unique[users.email]',
-            'password'   => 'required|min_length(6)',
+            'password'   => 'required|min_length[6]',
             'password_confirm' => 'matches[password]'
         ];
 
