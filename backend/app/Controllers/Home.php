@@ -68,6 +68,7 @@ class Home extends BaseController
 
         $isObj = is_object($dbUser);
 
+        // build initial dataset and then overwrite counts with real values
         $userData = [
             'first_name' => $isObj ? $dbUser->first_name : $dbUser['first_name'],
             'last_name'  => $isObj ? $dbUser->last_name : $dbUser['last_name'],
@@ -79,9 +80,15 @@ class Home extends BaseController
             'address'    => '',
             'city'       => '',
             'country'    => 'Egypt',
-            'orders'     => 0,
-            'favorites'  => 0
+            'orders'     => 0,      // will be replaced below
+            'favorites'  => 0       // placeholder for future feature
         ];
+
+        // compute how many orders this user has placed
+        $requestsModel = new \App\Models\RequestsModel();
+        $userData['orders'] = $requestsModel
+            ->where('user_id', $userId)
+            ->countAllResults();
 
         // Ensure display_name is set for the view
         $userData['display_name'] = $userData['first_name'] . ' ' . $userData['last_name'];

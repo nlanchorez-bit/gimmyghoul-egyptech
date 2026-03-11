@@ -58,6 +58,8 @@
 
     * `POST /v1/auth/login` → Request: {email, password}, Response: {token}
     * `GET /v1/users` → returns list of users
+* `GET /orders` → renders the buyer's order history page (
+  controller: `Requests::history` joins `requests` to `products`).
 * JSON response envelope standard:
 
   ```json
