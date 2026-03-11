@@ -89,6 +89,19 @@
                             <span>My Orders</span>
                         </a>
 
+                        <!-- NEW: View Cart Link -->
+                        <a
+                            href="<?= site_url('cart') ?>"
+                            class="dropdown-item"
+                            style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; color: #8B4513; text-decoration: none; transition: background-color 0.15s;"
+                            onmouseover="this.style.backgroundColor='#E8D7C3'"
+                            onmouseout="this.style.backgroundColor='transparent'">
+                            <svg style="width: 18px; height: 18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                            <span>View Cart</span>
+                        </a>
+
                         <a
                             href="<?= site_url('profile') ?>"
                             class="dropdown-item"
