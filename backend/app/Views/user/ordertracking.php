@@ -25,9 +25,9 @@
                             <tr style="border-bottom: 1px solid #eee;">
                                 <td style="padding: 20px 15px; display: flex; align-items: center; gap: 10px;">
                                     <?php
-                                        $img = !empty($req['main_image'])
-                                            ? base_url('uploads/products/' . $req['main_image'])
-                                            : 'https://via.placeholder.com/60';
+                                    $img = !empty($req['main_image'])
+                                        ? base_url('uploads/products/' . $req['main_image'])
+                                        : 'https://via.placeholder.com/60';
                                     ?>
                                     <img src="<?= $img ?>" alt="" style="width:60px; height:60px; object-fit:cover; border-radius:8px; border:1px solid #ddd;">
                                     <span style="font-weight: bold; color: #702524;"><?= esc($req['product_name'] ?? '-') ?></span>
