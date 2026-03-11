@@ -78,6 +78,18 @@
                     <!-- Menu Items -->
                     <div style="padding: 0.5rem 0;">
                         <a
+                            href="<?= site_url('orders') ?>"
+                            class="dropdown-item"
+                            style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; color: #8B4513; text-decoration: none; transition: background-color 0.15s;"
+                            onmouseover="this.style.backgroundColor='#E8D7C3'"
+                            onmouseout="this.style.backgroundColor='transparent'">
+                            <svg style="width: 18px; height: 18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path d="M3 3h18v2H3V3zm0 4h18v2H3V7zm0 4h18v2H3v-2zm0 4h18v2H3v-2zm0 4h18v2H3v-2z" />
+                            </svg>
+                            <span>My Orders</span>
+                        </a>
+
+                        <a
                             href="<?= site_url('profile') ?>"
                             class="dropdown-item"
                             style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; color: #8B4513; text-decoration: none; transition: background-color 0.15s;"

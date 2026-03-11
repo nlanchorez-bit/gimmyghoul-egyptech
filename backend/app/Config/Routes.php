@@ -37,6 +37,9 @@ $routes->get('checkout/(:num)', 'Requests::checkout/$1');
 $routes->post('requests/placeOrder', 'Requests::placeOrder');
 $routes->get('requests/success', 'Requests::success');
 
+// buyer order tracking/history
+$routes->get('orders', 'Requests::history');
+
 // --- AUTHENTICATION ---
 $routes->get('/login', 'Auth::showLoginPage');
 $routes->post('/login', 'Auth::login');

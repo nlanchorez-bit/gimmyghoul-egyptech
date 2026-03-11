@@ -418,7 +418,12 @@ $success = session()->getFlashdata('success');
                     <p class="user-email"><?= htmlspecialchars($user['email'] ?? '') ?></p>
 
                     <div class="user-stats">
-                        <div class="stat-item"><span class="stat-value"><?= htmlspecialchars($user['orders'] ?? 0) ?></span><span class="stat-label">Orders</span></div>
+                        <div class="stat-item">
+                            <a href="<?= base_url('orders') ?>" style="text-decoration: none; color: inherit; display: block;">
+                                <span class="stat-value"><?= htmlspecialchars($user['orders'] ?? 0) ?></span>
+                                <span class="stat-label">Orders</span>
+                            </a>
+                        </div>
                         <div class="stat-divider"></div>
                         <div class="stat-item"><span class="stat-value"><?= htmlspecialchars($user['favorites'] ?? 0) ?></span><span class="stat-label">Favorites</span></div>
                     </div>
