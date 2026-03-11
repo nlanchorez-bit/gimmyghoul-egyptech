@@ -145,7 +145,10 @@
                 <p style="color: #555; line-height: 1.6;"><?= nl2br(esc($product->description)) ?></p>
 
                 <?php if ($product->stock > 0): ?>
-                    <a href="<?= base_url('checkout/' . $product->id) ?>" class="btn btn-primary" style="padding: 15px 30px; display: inline-block; text-decoration: none; color: white; background: #702524; border-radius: 50px;">Buy Now</a>
+                    <div style="display: flex; gap: 15px; align-items: center;">
+                        <a href="<?= base_url('checkout/' . $product->id) ?>" class="btn btn-primary" style="padding: 15px 30px; display: inline-block; text-decoration: none; color: white; background: #702524; border-radius: 50px;">Buy Now</a>
+                        <a href="<?= base_url('cart/add/' . $product->id) ?>" class="btn btn-secondary" style="padding: 15px 30px; display: inline-block; text-decoration: none; color: #702524; background: transparent; border: 2px solid #702524; border-radius: 50px; font-weight: bold;">Add to Cart</a>
+                    </div>
                 <?php else: ?>
                     <button disabled style="padding: 15px 30px; background: #ccc; border: none; border-radius: 50px;">Sold Out</button>
                 <?php endif; ?>

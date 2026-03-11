@@ -40,6 +40,13 @@ $routes->get('requests/success', 'Requests::success');
 // buyer order tracking/history
 $routes->get('orders', 'Requests::history');
 
+// ---CART----
+$routes->get('cart', 'Cart::index');
+$routes->get('cart/add/(:num)', 'Cart::add/$1');
+$routes->get('cart/remove/(:num)', 'Cart::remove/$1');
+$routes->get('checkout/cart', 'Requests::checkoutCart');
+$routes->post('requests/placeCartOrder', 'Requests::placeCartOrder');
+
 // --- AUTHENTICATION ---
 $routes->get('/login', 'Auth::showLoginPage');
 $routes->post('/login', 'Auth::login');
