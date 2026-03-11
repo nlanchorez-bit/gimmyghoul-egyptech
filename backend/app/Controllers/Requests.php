@@ -101,4 +101,34 @@ class Requests extends BaseController
     {
         return view('user/request_success');
     }
+
+    /**
+     * 4. Order History / Tracking (Buyer side)
+     *
+     * Shows a table of requests the logged-in user has submitted.
+     * The controller performs a lightweight join so the view can
+     * display the product name (and optional image) alongside the
+     * request details.
+     */
+    public function history()
+    {
+        // must be signed in
+        if (! session()->has('user')) {
+            return redirect()->to('/login');
+        }
+
+        $userId = session()->get('user')['id'] ?? null;
+
+        $requestsModel = new RequestsModel();
+
+        // join to the products table so we can show product info
+        $requests = $requestsModel
+            ->select('requests.*, products.name AS product_name, products.main_image')
+            ->join('products', 'products.id = requests.product_id', 'left')
+            ->where('requests.user_id', $userId)
+            ->orderBy('requests.created_at', 'DESC')
+            ->findAll();
+
+        return view('user/ordertracking', ['requests' => $requests]);
+    }
 }
