@@ -45,20 +45,45 @@ final class RequestsControllerTest extends CIUnitTestCase
 
     public function testHistoryShowsOnlyUserOrders()
     {
-        // create a product to satisfy the join
+        // 1. Create Users and VERIFY they inserted successfully
+        $userModel = new UsersModel(); 
+
+        $userId1 = $userModel->insert([
+            'first_name'    => 'Alice',
+            'last_name'     => 'User',
+            'email'         => 'alice@example.com',
+            'password_hash' => password_hash('password123', PASSWORD_DEFAULT),
+            'account_status'=> 'active',
+        ]);
+        // If this fails, it will print the exact validation or allowed fields error to your terminal
+        $this->assertNotFalse($userId1, 'User 1 insert failed: ' . print_r($userModel->errors(), true));
+
+        $userId2 = $userModel->insert([
+            'first_name'    => 'Bob',
+            'last_name'     => 'Other',
+            'email'         => 'bob@example.com',
+            'password_hash' => password_hash('password123', PASSWORD_DEFAULT),
+            'account_status'=> 'active',
+        ]);
+        $this->assertNotFalse($userId2, 'User 2 insert failed: ' . print_r($userModel->errors(), true));
+
+        // 2. Create a product and VERIFY it inserted successfully
         $product = new ProductModel();
         $pid = $product->insert([
-            'name' => 'Test Product',
-            'slug' => 'test-product',
+            'name'     => 'Test Product',
+            'slug'     => 'test-product',
             'category' => 'test',
-            'price' => 10,
-            'stock' => 100,
+            'price'    => 10,
+            'stock'    => 100,
         ]);
+        $this->assertNotFalse($pid, 'Product insert failed: ' . print_r($product->errors(), true));
 
+        // 3. Create the requests
         $requests = new RequestsModel();
-        $requests->insert([
+        
+        $req1 = $requests->insert([
             'product_id' => $pid,
-            'user_id'    => 1,
+            'user_id'    => $userId1, 
             'first_name' => 'Alice',
             'last_name'  => 'User',
             'phone'      => '123',
@@ -67,9 +92,11 @@ final class RequestsControllerTest extends CIUnitTestCase
             'status'     => 'pending',
             'is_active'  => 1,
         ]);
-        $requests->insert([
+        $this->assertNotFalse($req1, 'Request 1 insert failed: ' . print_r($requests->errors(), true));
+        
+        $req2 = $requests->insert([
             'product_id' => $pid,
-            'user_id'    => 2,
+            'user_id'    => $userId2, 
             'first_name' => 'Bob',
             'last_name'  => 'Other',
             'phone'      => '456',
@@ -78,9 +105,12 @@ final class RequestsControllerTest extends CIUnitTestCase
             'status'     => 'pending',
             'is_active'  => 1,
         ]);
+        $this->assertNotFalse($req2, 'Request 2 insert failed: ' . print_r($requests->errors(), true));
 
-        $sessionData = ['user' => ['id' => 1, 'email' => 'alice@example.com']];
+        // 4. Update session data
+        $sessionData = ['user' => ['id' => $userId1, 'email' => 'alice@example.com']];
 
+        // 5. Execute the request and assert the results
         $result = $this->withSession($sessionData)->get('/orders');
         $result->assertOK();
         $result->assertSee('My Orders');
@@ -88,4 +118,3 @@ final class RequestsControllerTest extends CIUnitTestCase
         $result->assertSee('Alice');
         $result->assertDontSee('Bob');
     }
-}
