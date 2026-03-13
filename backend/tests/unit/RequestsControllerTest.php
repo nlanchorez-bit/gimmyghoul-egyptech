@@ -2,6 +2,7 @@
 
 use CodeIgniter\Test\CIUnitTestCase;
 use CodeIgniter\Test\FeatureTestTrait;
+use CodeIgniter\Test\DatabaseTestTrait;
 use App\Models\RequestsModel;
 use App\Models\ProductModel;
 
@@ -16,6 +17,16 @@ use App\Models\ProductModel;
 final class RequestsControllerTest extends CIUnitTestCase
 {
     use FeatureTestTrait;
+    use DatabaseTestTrait;
+
+    // Automatically run migrations before the first test
+    protected $migrate     = true;
+    // Automatically clear/refresh the database between tests
+    protected $refresh     = true;
+    // Use the 'tests' group from your database.php
+    protected $DBGroup     = 'tests';
+    // Ensure this matches the namespace of your migrations (usually 'App')
+    protected $namespace   = 'App';
 
     protected function setUp(): void
     {
