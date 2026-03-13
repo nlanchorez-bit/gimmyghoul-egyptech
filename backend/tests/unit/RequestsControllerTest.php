@@ -1,41 +1,29 @@
 <?php
 
+namespace Tests\Unit;
+
 use CodeIgniter\Test\CIUnitTestCase;
 use CodeIgniter\Test\FeatureTestTrait;
+use CodeIgniter\Test\DatabaseTestTrait;
 use App\Models\RequestsModel;
 use App\Models\ProductModel;
+use App\Models\UsersModel;
 
 /**
  * Basic tests for the Requests controller history() action.
- *
- * These are not exhaustive but ensure the page is protected and
- * only shows requests belonging to the signed‑in user.
  *
  * @internal
  */
 final class RequestsControllerTest extends CIUnitTestCase
 {
     use FeatureTestTrait;
+    use DatabaseTestTrait;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        // make sure table exists (migrations should normally handle this)
-        // and clear any leftover rows so tests are idempotent
-        $this->resetDatabase();
-    }
-
-    private function resetDatabase()
-    {
-        // this helper comes from ExampleDatabaseTest and is available
-        // because our phpunit.xml config loads \Tests\Support\Traits\DatabaseTrait
-        // (see ExampleDatabaseTest for reference). If this isn't wired
-        // up yet you can manually truncate.
-        $db = \Config\Database::connect();
-        $db->table('requests')->truncate();
-        $db->table('products')->truncate();
-    }
+    // Automated Database Setup for SQLite :memory:
+    protected $migrate   = true;
+    protected $refresh   = true;
+    protected $DBGroup   = 'tests';
+    protected $namespace = 'App';
 
     public function testHistoryRequiresLogin()
     {
@@ -45,20 +33,57 @@ final class RequestsControllerTest extends CIUnitTestCase
 
     public function testHistoryShowsOnlyUserOrders()
     {
-        // create a product to satisfy the join
-        $product = new ProductModel();
-        $pid = $product->insert([
-            'name' => 'Test Product',
-            'slug' => 'test-product',
-            'category' => 'test',
-            'price' => 10,
-            'stock' => 100,
-        ]);
+        // 1. Create Users
+        $userModel = new UsersModel(); 
 
+        $userId1 = $userModel->insert([
+            'first_name'    => 'Alice',
+            'last_name'     => 'User',
+            'email'         => 'alice@example.com',
+            'password_hash' => password_hash('password123', PASSWORD_DEFAULT),
+            'account_status'=> 'active',
+        ]);
+        $this->assertNotFalse($userId1, 'User 1 insert failed: ' . print_r($userModel->errors(), true));
+
+        $userId2 = $userModel->insert([
+            'first_name'    => 'Bob',
+            'last_name'     => 'Other',
+            'email'         => 'bob@example.com',
+            'password_hash' => password_hash('password123', PASSWORD_DEFAULT),
+            'account_status'=> 'active',
+        ]);
+        $this->assertNotFalse($userId2, 'User 2 insert failed: ' . print_r($userModel->errors(), true));
+
+        // 2. Create TWO different products
+        $productModel = new ProductModel();
+        
+        $pidAlice = $productModel->insert([
+            'name'         => 'Alices Unique Product',
+            'slug'         => 'alices-product',
+            'category'     => 'test',
+            'price'        => 10,
+            'stock'        => 100,
+            'is_available' => 1,
+        ]);
+        $this->assertNotFalse($pidAlice, 'Product 1 insert failed: ' . print_r($productModel->errors(), true));
+        
+        $pidBob = $productModel->insert([
+            'name'         => 'Bobs Secret Product',
+            'slug'         => 'bobs-product',
+            'category'     => 'test',
+            'price'        => 10,
+            'stock'        => 100,
+            'is_available' => 1,
+        ]);
+        $this->assertNotFalse($pidBob, 'Product 2 insert failed: ' . print_r($productModel->errors(), true));
+
+        // 3. Create the requests
         $requests = new RequestsModel();
-        $requests->insert([
-            'product_id' => $pid,
-            'user_id'    => 1,
+        
+        // Give Alice her product
+        $req1 = $requests->insert([
+            'product_id' => $pidAlice,
+            'user_id'    => $userId1, 
             'first_name' => 'Alice',
             'last_name'  => 'User',
             'phone'      => '123',
@@ -67,9 +92,12 @@ final class RequestsControllerTest extends CIUnitTestCase
             'status'     => 'pending',
             'is_active'  => 1,
         ]);
-        $requests->insert([
-            'product_id' => $pid,
-            'user_id'    => 2,
+        $this->assertNotFalse($req1, 'Request 1 insert failed: ' . print_r($requests->errors(), true));
+        
+        // Give Bob his product
+        $req2 = $requests->insert([
+            'product_id' => $pidBob,
+            'user_id'    => $userId2, 
             'first_name' => 'Bob',
             'last_name'  => 'Other',
             'phone'      => '456',
@@ -78,14 +106,19 @@ final class RequestsControllerTest extends CIUnitTestCase
             'status'     => 'pending',
             'is_active'  => 1,
         ]);
+        $this->assertNotFalse($req2, 'Request 2 insert failed: ' . print_r($requests->errors(), true));
 
-        $sessionData = ['user' => ['id' => 1, 'email' => 'alice@example.com']];
+        // 4. Update session data (Log in as Alice)
+        $sessionData = ['user' => ['id' => $userId1, 'email' => 'alice@example.com']];
 
+        // 5. Execute the request and assert the results
         $result = $this->withSession($sessionData)->get('/orders');
         $result->assertOK();
-        $result->assertSee('My Orders');
-        $result->assertSee('Test Product');
-        $result->assertSee('Alice');
-        $result->assertDontSee('Bob');
+        
+        // Assert we see Alice's specific product
+        $result->assertSee('Alices Unique Product');
+        
+        // Assert we DO NOT see Bob's specific product
+        $result->assertDontSee('Bobs Secret Product');
     }
 }
