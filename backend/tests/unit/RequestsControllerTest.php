@@ -45,20 +45,41 @@ final class RequestsControllerTest extends CIUnitTestCase
 
     public function testHistoryShowsOnlyUserOrders()
     {
-        // create a product to satisfy the join
-        $product = new ProductModel();
-        $pid = $product->insert([
-            'name' => 'Test Product',
-            'slug' => 'test-product',
-            'category' => 'test',
-            'price' => 10,
-            'stock' => 100,
+        // 1. Create users using your exact UsersModel and allowed fields
+        $userModel = new \App\Models\UsersModel(); 
+
+        $userId1 = $userModel->insert([
+            'first_name'    => 'Alice',
+            'last_name'     => 'User',
+            'email'         => 'alice@example.com',
+            'password_hash' => password_hash('password123', PASSWORD_DEFAULT),
+            'account_status'=> 'active', // Optional: added just in case your DB requires it
         ]);
 
-        $requests = new RequestsModel();
+        $userId2 = $userModel->insert([
+            'first_name'    => 'Bob',
+            'last_name'     => 'Other',
+            'email'         => 'bob@example.com',
+            'password_hash' => password_hash('password123', PASSWORD_DEFAULT),
+            'account_status'=> 'active',
+        ]);
+
+        // 2. Create a product to satisfy the join on product_id
+        $product = new \App\Models\ProductModel();
+        $pid = $product->insert([
+            'name'     => 'Test Product',
+            'slug'     => 'test-product',
+            'category' => 'test',
+            'price'    => 10,
+            'stock'    => 100,
+        ]);
+
+        // 3. Create the requests using the dynamically generated user IDs
+        $requests = new \App\Models\RequestsModel();
+        
         $requests->insert([
             'product_id' => $pid,
-            'user_id'    => 1,
+            'user_id'    => $userId1, // Matches Alice's dynamic ID
             'first_name' => 'Alice',
             'last_name'  => 'User',
             'phone'      => '123',
@@ -67,9 +88,10 @@ final class RequestsControllerTest extends CIUnitTestCase
             'status'     => 'pending',
             'is_active'  => 1,
         ]);
+        
         $requests->insert([
             'product_id' => $pid,
-            'user_id'    => 2,
+            'user_id'    => $userId2, // Matches Bob's dynamic ID
             'first_name' => 'Bob',
             'last_name'  => 'Other',
             'phone'      => '456',
@@ -79,8 +101,10 @@ final class RequestsControllerTest extends CIUnitTestCase
             'is_active'  => 1,
         ]);
 
-        $sessionData = ['user' => ['id' => 1, 'email' => 'alice@example.com']];
+        // 4. Update session data to use Alice's dynamic user ID
+        $sessionData = ['user' => ['id' => $userId1, 'email' => 'alice@example.com']];
 
+        // 5. Execute the request and assert the results
         $result = $this->withSession($sessionData)->get('/orders');
         $result->assertOK();
         $result->assertSee('My Orders');
@@ -88,4 +112,3 @@ final class RequestsControllerTest extends CIUnitTestCase
         $result->assertSee('Alice');
         $result->assertDontSee('Bob');
     }
-}
